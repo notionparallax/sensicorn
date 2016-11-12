@@ -200,6 +200,8 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">pytz</span>
 <span class="kn">import</span> <span class="nn">helpers</span> <span class="kn">as</span> <span class="nn">h</span>
+<span class="c1"># Since I moved most of the functions into their own file I haven&#39;t cleaned up the imports section. </span>
+<span class="c1"># There is probably unused imports here, but I&#39;d imagine that it&#39;s not too much of a problem.</span>
 </pre></div>
 
 </div>
@@ -210,21 +212,6 @@ div#notebook {
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">SHOW_TESTS</span> <span class="o">=</span> <span class="bp">False</span>
-
-<span class="n">personNumber</span> <span class="o">=</span> <span class="mi">304</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="o">%</span><span class="k">matplotlib</span> <span class="n">inline</span>
@@ -242,18 +229,24 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="get-the-data-we-need">Get the data we need</h1>
-<p>About the stickers, base stations and detections</p>
+<p>To do this analysis, we need to know about the stickers, base stations and detections.</p>
+<p>Stickers and base stations are static data, they live in google spreadsheets.</p>
+<p>Detections is from the MongoDB database.</p>
 <h2 id="stickers">Stickers</h2>
 <p>The stickers are the locating items in the space. They are stuck to the ceiling at roughly 2m intervals.</p>
+<p>TODO: put in the gif of me putting up a sticker and an image of one.</p>
+<p>They have a QR code on them, so they can be scaned with a phone. That gives us a time stamp and a location.</p>
+<p>In future we should be able to get orientation and position in field of view because QR codes have a top.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="n">stickerLocations</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="s2">&quot;https://docs.google.com/spreadsheets/d/1sijQZR2iFLo2FS_3r5gbsuAkaglRz557LWjdLxnPkpE/pub?gid=0&amp;single=true&amp;output=csv&quot;</span><span class="p">)</span>
+<span class="n">stickerLocations</span> <span class="o">=</span> <span class="n">stickerLocations</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># this is just because we aren&#39;t on multiple floors</span>
 <span class="n">stickerLocations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
@@ -265,7 +258,7 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[3]:</div>
 
 <div class="output_html rendered_html output_subarea output_pyout">
 <div style="max-width:1500px;overflow:auto;">
@@ -277,7 +270,6 @@ div#notebook {
       <th>stickerID</th>
       <th>x</th>
       <th>y</th>
-      <th>z</th>
     </tr>
   </thead>
   <tbody>
@@ -287,7 +279,6 @@ div#notebook {
       <td>1</td>
       <td>63852.09440</td>
       <td>-13561.617780</td>
-      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -295,7 +286,6 @@ div#notebook {
       <td>2</td>
       <td>62985.85359</td>
       <td>-11830.460440</td>
-      <td>0</td>
     </tr>
     <tr>
       <th>2</th>
@@ -303,7 +293,6 @@ div#notebook {
       <td>3</td>
       <td>62985.85359</td>
       <td>-9830.460444</td>
-      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -321,13 +310,16 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="agent-locations">Agent Locations</h2>
+<h2 id="base-station-agent-locations">Base Station (Agent) Locations</h2>
+<p>We use the term agent and base station interchangably at the moment. In the future we will probably use agent to mean a simulated occupant, so expect to see base station used more.</p>
+<p>TODO: put in a base image</p>
+<p>These are the Raspberry Pi computers that recieve the beacon packets.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="n">baseStationData</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="s2">&quot;https://docs.google.com/spreadsheets/d/167pxh_NRq5e9sQV9Zb8Z-Q-kdN7Zy9FCzCp47eVXTuE/pub?gid=1446311565&amp;single=true&amp;output=csv&quot;</span><span class="p">)</span>
@@ -347,7 +339,7 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[4]:</div>
 
 <div class="output_html rendered_html output_subarea output_pyout">
 <div style="max-width:1500px;overflow:auto;">
@@ -400,18 +392,79 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="known-locations">Known Locations</h2>
+<p>These are generated by me walking around wearing my badge. I scan each sticker as I pass under it. Because the stickers are so close, it&#39;s hard for me to take an ambiguous route between them.</p>
+<p>The data sets here are test sets. </p>
+<p>TODO: replace these test sets with a series of 5 minute journeys in an array of URLs.</p>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">getSampleWalkData</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">firstRefTry</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">columnNames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stickerID&quot;</span><span class="p">,</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">firstRefTry</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">firstRefTry</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="s2">&quot;https://docs.google.com/spreadsheets/d/1uE_tUItRANypaWxCmZeXWsgFZq_JDG626v4Gg2UQfKg/pub?gid=952022876&amp;single=true&amp;output=csv&quot;</span><span class="p">,</span>
-                                <span class="n">columnNames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stickerID&quot;</span><span class="p">,</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">])</span>
-<span class="n">firstRefTry</span> <span class="o">=</span> <span class="n">firstRefTry</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">firstRefTry</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight"><pre><span class="n">trainingWalkURLs</span> <span class="o">=</span> <span class="p">[</span>
+ <span class="s2">&quot;https://docs.google.com/spreadsheets/d/1uE_tUItRANypaWxCmZeXWsgFZq_JDG626v4Gg2UQfKg/pub?gid=952022876&amp;single=true&amp;output=csv&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;https://docs.google.com/spreadsheets/d/1v20slmW6nz8GnA3u8cbWBYpTuT1UwaLHFSm8AYNNr8E/pub?gid=649191784&amp;single=true&amp;output=csv&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;https://docs.google.com/spreadsheets/d/10QiLgS-oBha4mwwJlzrZb-8BZHb3MPJ7Q3FIrPuTpUA/pub?gid=1669457584&amp;single=true&amp;output=csv&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;https://docs.google.com/spreadsheets/d/1bU-juDRDXl0mVWGCsPvTppaOf7td51R2cP1P6kxjAk4/pub?gid=1291732418&amp;single=true&amp;output=csv&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;https://docs.google.com/spreadsheets/d/12YyeEIds7RSKfF1NVLqy3x8F_hidV3lhNwfsJ8UuBRE/pub?gid=2131252797&amp;single=true&amp;output=csv&quot;</span>
+<span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="get-the-data-and-format-it-ready-for-use">Get the data and format it ready for use</h2>
+<p>Get all the data from the spreadsheets.</p>
+<p>Give known positions time and coordinates</p>
+<p>To make things easier to process later I&#39;ve joined the coords to the sticker detections</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="n">trainingWalks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">twURL</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trainingWalkURLs</span><span class="p">):</span>
+    <span class="n">thisData</span> <span class="o">=</span> <span class="n">getSampleWalkData</span><span class="p">(</span><span class="n">twURL</span><span class="p">)</span>
+    <span class="n">richStickerData</span> <span class="o">=</span> <span class="n">thisData</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">stickerLocations</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;stickerID&quot;</span><span class="p">)</span>
+    <span class="n">richStickerData</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">h</span><span class="o">.</span><span class="n">sydTimeToUTC</span><span class="p">(</span><span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">timeStamp</span><span class="p">,</span> <span class="n">dayfirst</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">richStickerData</span><span class="p">[</span><span class="s1">&#39;sydtime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">timeStamp</span><span class="p">,</span> <span class="n">dayfirst</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">richStickerData</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">richStickerData</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s2">&quot;{}: {} TO {} ({}) {} rows&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> 
+                                 <span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> 
+                                 <span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                                 <span class="n">richStickerData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    
+    <span class="n">trainingWalks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">richStickerData</span><span class="p">)</span>
+    
 </pre></div>
 
 </div>
@@ -422,39 +475,17 @@ div#notebook {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+0: 2016-10-17 00:21:32+00:00 TO 2016-10-17 00:23:50+00:00 (0 days 00:02:18) 23 rows
+1: 2016-11-02 00:28:58+00:00 TO 2016-11-02 00:46:47+00:00 (0 days 00:17:49) 221 rows
+2: 2016-11-06 02:20:09+00:00 TO 2016-11-06 02:22:17+00:00 (0 days 00:02:08) 28 rows
+3: 2016-11-12 04:31:04+00:00 TO 2016-11-12 04:51:12+00:00 (0 days 00:20:08) 231 rows
+4: 2016-11-09 05:13:43+00:00 TO 2016-11-09 05:20:47+00:00 (0 days 00:07:04) 76 rows
 
-<div class="output_html rendered_html output_subarea output_pyout">
-<div style="max-width:1500px;overflow:auto;">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>stickerID</th>
-      <th>timeStamp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>208</td>
-      <td>17/10/2016 11:23:50</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>207</td>
-      <td>17/10/2016 11:23:44</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>206</td>
-      <td>17/10/2016 11:23:38</td>
-    </tr>
-  </tbody>
-</table>
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>
@@ -466,56 +497,23 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://docs.google.com/spreadsheets/d/1v20slmW6nz8GnA3u8cbWBYpTuT1UwaLHFSm8AYNNr8E/pub?gid=649191784&amp;single=true&amp;output=csv&quot;</span>
-<span class="n">firstWalk</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">columnNames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stickerID&quot;</span><span class="p">,</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">])</span>
-<span class="n">firstWalk</span> <span class="o">=</span> <span class="n">firstWalk</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="n">firstWalk</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight"><pre> 
 </pre></div>
 
 </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
-
-<div class="output_html rendered_html output_subarea output_pyout">
-<div style="max-width:1500px;overflow:auto;">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>stickerID</th>
-      <th>timeStamp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>88</td>
-      <td>02/11/2016 11:46:47</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>87</td>
-      <td>02/11/2016 11:46:43</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>84</td>
-      <td>02/11/2016 11:46:37</td>
-    </tr>
-  </tbody>
-</table>
 </div>
-</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="n">liveSet</span> <span class="o">=</span> <span class="n">trainingWalks</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
 
 </div>
-
 </div>
 </div>
 
@@ -525,11 +523,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://docs.google.com/spreadsheets/d/10QiLgS-oBha4mwwJlzrZb-8BZHb3MPJ7Q3FIrPuTpUA/pub?gid=1669457584&amp;single=true&amp;output=csv&quot;</span>
-<span class="n">quickWalk</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">getDFfromCSVURL</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">columnNames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stickerID&quot;</span><span class="p">,</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">])</span>
-<span class="n">quickWalk</span> <span class="o">=</span> <span class="n">quickWalk</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;xstickerID&quot;</span><span class="p">,</span><span class="s2">&quot;detectionType&quot;</span><span class="p">,</span><span class="s2">&quot;xID&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="n">quickWalk</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight"><pre><span class="n">liveSet</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -549,118 +543,52 @@ div#notebook {
     <tr style="text-align: right;">
       <th></th>
       <th>stickerID</th>
-      <th>timeStamp</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>275</td>
-      <td>06/11/2016 13:22:17</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>274</td>
-      <td>06/11/2016 13:22:12</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>273</td>
-      <td>06/11/2016 13:22:08</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">liveSet</span> <span class="o">=</span> <span class="n">quickWalk</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="give-known-positions-time-and-coordinates">Give known positions time and coordinates</h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">richStickerData</span> <span class="o">=</span> <span class="n">liveSet</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">stickerLocations</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;stickerID&quot;</span><span class="p">)</span>
-<span class="n">richStickerData</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">h</span><span class="o">.</span><span class="n">sydTimeToUTC</span><span class="p">(</span><span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">timeStamp</span><span class="p">,</span> <span class="n">dayfirst</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">richStickerData</span><span class="p">[</span><span class="s1">&#39;ptime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">dateutil</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">timeStamp</span><span class="p">,</span> <span class="n">dayfirst</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">richStickerData</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">,</span><span class="s2">&quot;timeStamp&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">richStickerData</span> <span class="o">=</span> <span class="n">richStickerData</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">richStickerData</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[10]:</div>
-
-<div class="output_html rendered_html output_subarea output_pyout">
-<div style="max-width:1500px;overflow:auto;">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>stickerID</th>
       <th>x</th>
       <th>y</th>
       <th>time</th>
-      <th>ptime</th>
+      <th>sydtime</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>27</th>
-      <td>72</td>
-      <td>42623.86053</td>
-      <td>29848.85705</td>
-      <td>2016-11-06 02:20:09+00:00</td>
-      <td>2016-11-06 13:20:09</td>
+      <th>230</th>
+      <td>163</td>
+      <td>37113.33215</td>
+      <td>14324.312730</td>
+      <td>2016-11-12 04:31:04+00:00</td>
+      <td>2016-11-12 15:31:04</td>
     </tr>
     <tr>
-      <th>26</th>
-      <td>73</td>
-      <td>40623.86053</td>
-      <td>29848.85705</td>
-      <td>2016-11-06 02:20:15+00:00</td>
-      <td>2016-11-06 13:20:15</td>
+      <th>229</th>
+      <td>162</td>
+      <td>37113.33215</td>
+      <td>12324.312730</td>
+      <td>2016-11-12 04:31:09+00:00</td>
+      <td>2016-11-12 15:31:09</td>
     </tr>
     <tr>
-      <th>25</th>
-      <td>52</td>
-      <td>38034.91657</td>
-      <td>28100.28274</td>
-      <td>2016-11-06 02:20:21+00:00</td>
-      <td>2016-11-06 13:20:21</td>
+      <th>228</th>
+      <td>161</td>
+      <td>37113.33215</td>
+      <td>10324.312730</td>
+      <td>2016-11-12 04:31:14+00:00</td>
+      <td>2016-11-12 15:31:14</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>160</td>
+      <td>37113.33215</td>
+      <td>8324.312731</td>
+      <td>2016-11-12 04:31:18+00:00</td>
+      <td>2016-11-12 15:31:18</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>159</td>
+      <td>36875.44152</td>
+      <td>6455.449251</td>
+      <td>2016-11-12 04:31:26+00:00</td>
+      <td>2016-11-12 15:31:26</td>
     </tr>
   </tbody>
 </table>
@@ -679,16 +607,29 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="detections">Detections</h2>
+<p>This is to get the detection data associated with each journey. This was a <em>huge</em> struggle to get. There is so much data that most attempts failed. It was solved by shaving five second slices off the data. Any more than that and the server choked. I&#39;m not sure why, the data returns from queries on the server, but 5s worth returns almost immediatly, but more times out.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="c1">#if you get an error here you need to make sure that you have the server access code one dir up from the git repo</span>
-<span class="n">key</span> <span class="o">=</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../../../key.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">class</span> <span class="nc">timeout</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">error_message</span><span class="o">=</span><span class="s1">&#39;Timeout&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seconds</span> <span class="o">=</span> <span class="n">seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_message</span> <span class="o">=</span> <span class="n">error_message</span>
+    <span class="k">def</span> <span class="nf">handle_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TimeoutError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_message</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_timeout</span><span class="p">)</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>       
 </pre></div>
 
 </div>
@@ -698,14 +639,29 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="k">def</span> <span class="nf">getTrainingData</span><span class="p">(</span><span class="n">trainingDataFrame</span><span class="p">,</span> <span class="n">personID</span><span class="o">=</span><span class="mi">304</span><span class="p">,</span> <span class="n">timePadding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">chunkLength</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">chatty</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">failures</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">robustRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">tries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">timeoutSeconds</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>    
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">with</span> <span class="n">timeout</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timeoutSeconds</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tries</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">tries</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">failures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="k">print</span> <span class="s2">&quot;failed {} times&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+    
     <span class="c1">#Setup to request</span>
     <span class="n">timePadding</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timePadding</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://ec2-52-65-111-92.ap-southeast-2.compute.amazonaws.com:3000&quot;</span>
-    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;authorization&#39;</span><span class="p">:</span> <span class="s2">&quot;Basic &quot;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;authorization&#39;</span><span class="p">:</span> <span class="s2">&quot;Basic &quot;</span><span class="p">,</span><span class="c1"># + key,</span>
                <span class="s1">&#39;content-type&#39;</span><span class="p">:</span>  <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
                <span class="s1">&#39;cache-control&#39;</span><span class="p">:</span> <span class="s2">&quot;no-cache&quot;</span><span class="p">}</span>
     <span class="n">ws</span> <span class="o">=</span> <span class="p">(</span><span class="n">trainingDataFrame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="n">timePadding</span><span class="p">)</span>
@@ -716,8 +672,8 @@ div#notebook {
     <span class="k">if</span> <span class="n">chatty</span><span class="p">:</span>
         <span class="k">print</span> <span class="s2">&quot;first detection:&quot;</span><span class="p">,</span> <span class="n">ws</span>
         <span class="k">print</span> <span class="s2">&quot;last detection: &quot;</span><span class="p">,</span> <span class="n">we</span>
-        <span class="k">print</span> <span class="s2">&quot;window Length&quot;</span><span class="p">,</span> <span class="n">windowLength</span>
-        <span class="k">print</span> <span class="s2">&quot;chunk Count&quot;</span><span class="p">,</span> <span class="n">chunkCount</span>
+        <span class="k">print</span> <span class="s2">&quot;window Length&quot;</span><span class="p">,</span>    <span class="n">windowLength</span>
+        <span class="k">print</span> <span class="s2">&quot;chunk Count&quot;</span><span class="p">,</span>      <span class="n">chunkCount</span>
         <span class="k">print</span> <span class="n">startTime</span><span class="p">,</span> <span class="s2">&quot;starting...&quot;</span>
 
     <span class="n">responses</span> <span class="o">=</span> <span class="p">[]</span>
@@ -725,19 +681,19 @@ div#notebook {
     <span class="n">thisws</span> <span class="o">=</span> <span class="n">ws</span>
     <span class="n">thiswe</span> <span class="o">=</span> <span class="n">ws</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">chunkLength</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chunkCount</span><span class="p">):</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="s2">&quot;{}/find?minor[]={}&amp;windowstart={}&amp;windowend={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">personNumber</span><span class="p">,</span> <span class="n">thisws</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="n">thiswe</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s2">&quot;{}/find?minor[]={}&amp;windowstart={}&amp;windowend={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">personID</span><span class="p">,</span> <span class="n">thisws</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="n">thiswe</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
 
-        <span class="c1"># print &quot;headers:&quot;, headers # don&#39;t print the headers, it puts the auth into the repo</span>
-    <span class="c1">#     print &quot;url request:&quot;, request</span>
+        <span class="c1">#print &quot;headers:&quot;, headers # don&#39;t print the headers, it puts the auth into the repo</span>
+        <span class="c1">#print &quot;url request:&quot;, request</span>
 
-        <span class="n">q</span><span class="o">=</span><span class="s2">&quot;db.beacondetections.find({{ minor: {}, time: {{ $gt: ISODate(</span><span class="se">\&quot;</span><span class="s2">{}</span><span class="se">\&quot;</span><span class="s2">), $lt: ISODate(</span><span class="se">\&quot;</span><span class="s2">{}</span><span class="se">\&quot;</span><span class="s2">) }} }} )&quot;</span>
-    <span class="c1">#     print &quot;db query:&quot;, q.format(personNumber, thisws.isoformat(), thiswe.isoformat())</span>
+        <span class="c1">#q=&quot;db.beacondetections.find({{ minor: {}, time: {{ $gt: ISODate(\&quot;{}\&quot;), $lt: ISODate(\&quot;{}\&quot;) }} }} )&quot;</span>
+        <span class="c1">#print &quot;db query:&quot;, q.format(personID, thisws.isoformat(), thiswe.isoformat())</span>
+        <span class="n">windowDetectionsResponse</span> <span class="o">=</span> <span class="n">robustRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">windowDetectionsResponse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">chatty</span><span class="o">==</span><span class="s2">&quot;very&quot;</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">windowDetectionsResponse</span><span class="o">.</span><span class="n">status_code</span>
 
-        <span class="n">windowDetectionsResponse</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">chatty</span><span class="p">:</span>
-            <span class="k">print</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">windowDetectionsResponse</span><span class="o">.</span><span class="n">status_code</span>
-
-        <span class="n">responses</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">windowDetectionsResponse</span><span class="o">.</span><span class="n">text</span><span class="p">)[</span><span class="s1">u&#39;results&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">responses</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">windowDetectionsResponse</span><span class="o">.</span><span class="n">text</span><span class="p">)[</span><span class="s1">u&#39;results&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">thisws</span> <span class="o">=</span> <span class="n">thiswe</span>
         <span class="n">thiswe</span> <span class="o">=</span> <span class="n">thiswe</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">chunkLength</span><span class="p">)</span>
     
@@ -746,6 +702,9 @@ div#notebook {
     <span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;temptime&#39;</span><span class="p">:</span><span class="s1">&#39;time&#39;</span><span class="p">})</span>
     <span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s2">&quot;done with {} failures</span><span class="se">\n</span><span class="s2">in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">failures</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+    
     <span class="k">return</span> <span class="n">responses</span>
 </pre></div>
 
@@ -756,12 +715,11 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">timePadding</span><span class="o">=</span><span class="mi">1</span>
-<span class="n">sampledDF</span> <span class="o">=</span> <span class="n">getTrainingData</span><span class="p">(</span><span class="n">richStickerData</span><span class="p">,</span> <span class="n">timePadding</span><span class="o">=</span><span class="n">timePadding</span><span class="p">,</span> <span class="n">chatty</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">sampledDF</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight"><pre><span class="n">timePadding</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">sampledDF</span> <span class="o">=</span> <span class="n">getTrainingData</span><span class="p">(</span><span class="n">liveSet</span><span class="p">,</span> <span class="n">timePadding</span><span class="o">=</span><span class="n">timePadding</span><span class="p">,</span> <span class="n">chatty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -771,6 +729,51 @@ div#notebook {
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+first detection: 2016-11-12 04:31:03+00:00
+last detection:  2016-11-12 04:51:13+00:00
+window Length 1210.0
+chunk Count 242
+2016-11-12 19:51:06.306365 starting...
+done with 0 failures
+in 0:00:37.166207
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="k">print</span> <span class="n">sampledDF</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">sampledDF</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">sampledDF</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+0 days 00:18:59.153000
+
+</pre>
+</div>
+</div>
 
 <div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
 
@@ -788,39 +791,39 @@ div#notebook {
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>0000000023e614ba</td>
+      <th>3539</th>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-62</td>
-      <td>2016-11-06 02:20:08.885000+00:00</td>
+      <td>-78</td>
+      <td>2016-11-12 04:50:07.508000+00:00</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>0000000013bed9f7</td>
+      <th>3540</th>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-68</td>
-      <td>2016-11-06 02:20:08.890000+00:00</td>
+      <td>-78</td>
+      <td>2016-11-12 04:50:07.508000+00:00</td>
     </tr>
     <tr>
-      <th>21</th>
-      <td>00000000b6672df6</td>
+      <th>3537</th>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-84</td>
-      <td>2016-11-06 02:20:09.812000+00:00</td>
+      <td>-78</td>
+      <td>2016-11-12 04:50:07.508000+00:00</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>00000000c7ce4c76</td>
+      <th>3538</th>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-89</td>
-      <td>2016-11-06 02:20:09.840000+00:00</td>
+      <td>-78</td>
+      <td>2016-11-12 04:50:07.508000+00:00</td>
     </tr>
     <tr>
-      <th>15</th>
-      <td>000000000b41629a</td>
+      <th>3541</th>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-98</td>
-      <td>2016-11-06 02:20:09.840000+00:00</td>
+      <td>-78</td>
+      <td>2016-11-12 04:50:07.508000+00:00</td>
     </tr>
   </tbody>
 </table>
@@ -833,9 +836,18 @@ div#notebook {
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The operation below gives the detection data spatial information. It is the simplest way to deal with it later from a pandas point of view. It might be a bit of a memory hit because it&#39;s denormalising all the data, but who cares about memory these days!</p>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="n">bigdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">sampledDF</span><span class="p">,</span><span class="n">baseStationData</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;agentId&quot;</span><span class="p">])</span>
@@ -843,7 +855,7 @@ div#notebook {
 <span class="n">minPower</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">bigdf</span><span class="o">.</span><span class="n">rssi</span><span class="p">)</span>
 <span class="n">bigdf</span><span class="p">[</span><span class="s1">&#39;rssiAdj&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bigdf</span><span class="o">.</span><span class="n">rssi</span> <span class="o">-</span> <span class="n">minPower</span>
 
-<span class="k">print</span> <span class="n">bigdf</span><span class="o">.</span><span class="n">shape</span>
+<span class="k">print</span> <span class="n">bigdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;rows&quot;</span>
 <span class="n">bigdf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -858,13 +870,13 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-(864, 8)
+3549 rows
 
 </pre>
 </div>
 </div>
 
-<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
 
 <div class="output_html rendered_html output_subarea output_pyout">
 <div style="max-width:1500px;overflow:auto;">
@@ -885,58 +897,58 @@ div#notebook {
   <tbody>
     <tr>
       <th>0</th>
-      <td>0000000023e614ba</td>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-62</td>
-      <td>2016-11-06 02:20:08.885000+00:00</td>
-      <td>Johnnie</td>
-      <td>48271.72893</td>
-      <td>29623.3036</td>
-      <td>41</td>
+      <td>-76</td>
+      <td>2016-11-12 04:31:08.355000+00:00</td>
+      <td>Hotel</td>
+      <td>41169.22907</td>
+      <td>1712.860038</td>
+      <td>25</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0000000023e614ba</td>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-57</td>
-      <td>2016-11-06 02:20:09.842000+00:00</td>
-      <td>Johnnie</td>
-      <td>48271.72893</td>
-      <td>29623.3036</td>
-      <td>46</td>
+      <td>-91</td>
+      <td>2016-11-12 04:31:10.265000+00:00</td>
+      <td>Hotel</td>
+      <td>41169.22907</td>
+      <td>1712.860038</td>
+      <td>10</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0000000023e614ba</td>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-74</td>
-      <td>2016-11-06 02:20:10.798000+00:00</td>
-      <td>Johnnie</td>
-      <td>48271.72893</td>
-      <td>29623.3036</td>
-      <td>29</td>
+      <td>-81</td>
+      <td>2016-11-12 04:31:15.032000+00:00</td>
+      <td>Hotel</td>
+      <td>41169.22907</td>
+      <td>1712.860038</td>
+      <td>20</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0000000023e614ba</td>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-72</td>
-      <td>2016-11-06 02:20:16.528000+00:00</td>
-      <td>Johnnie</td>
-      <td>48271.72893</td>
-      <td>29623.3036</td>
-      <td>31</td>
+      <td>-80</td>
+      <td>2016-11-12 04:31:20.756000+00:00</td>
+      <td>Hotel</td>
+      <td>41169.22907</td>
+      <td>1712.860038</td>
+      <td>21</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0000000023e614ba</td>
+      <td>00000000c6134299</td>
       <td>304</td>
-      <td>-77</td>
-      <td>2016-11-06 02:20:19.384000+00:00</td>
-      <td>Johnnie</td>
-      <td>48271.72893</td>
-      <td>29623.3036</td>
-      <td>26</td>
+      <td>-68</td>
+      <td>2016-11-12 04:31:22.669000+00:00</td>
+      <td>Hotel</td>
+      <td>41169.22907</td>
+      <td>1712.860038</td>
+      <td>33</td>
     </tr>
   </tbody>
 </table>
@@ -945,6 +957,120 @@ div#notebook {
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="n">bigdf</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
+
+<div class="output_html rendered_html output_subarea output_pyout">
+<div style="max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>agentId</th>
+      <th>minor</th>
+      <th>rssi</th>
+      <th>time</th>
+      <th>agentName</th>
+      <th>x</th>
+      <th>y</th>
+      <th>rssiAdj</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3544</th>
+      <td>0000000000d80090</td>
+      <td>304</td>
+      <td>-91</td>
+      <td>2016-11-12 04:38:22.821000+00:00</td>
+      <td>Echo</td>
+      <td>28541.19893</td>
+      <td>8708.325137</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>3545</th>
+      <td>0000000000d80090</td>
+      <td>304</td>
+      <td>-80</td>
+      <td>2016-11-12 04:38:26.647000+00:00</td>
+      <td>Echo</td>
+      <td>28541.19893</td>
+      <td>8708.325137</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>3546</th>
+      <td>000000000b41629a</td>
+      <td>304</td>
+      <td>-82</td>
+      <td>2016-11-12 04:39:50.668000+00:00</td>
+      <td>Edward</td>
+      <td>36726.34790</td>
+      <td>2989.947093</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>3547</th>
+      <td>000000000b41629a</td>
+      <td>304</td>
+      <td>-84</td>
+      <td>2016-11-12 04:39:56.398000+00:00</td>
+      <td>Edward</td>
+      <td>36726.34790</td>
+      <td>2989.947093</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>3548</th>
+      <td>000000000b41629a</td>
+      <td>304</td>
+      <td>-92</td>
+      <td>2016-11-12 04:40:06.901000+00:00</td>
+      <td>Edward</td>
+      <td>36726.34790</td>
+      <td>2989.947093</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre> 
+</pre></div>
+
+</div>
 </div>
 </div>
 
@@ -965,19 +1091,20 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I want to show only the detections in a time-window defined by halfway between the scan times.</p>
 <p>I.e. if I get to 198 at 51s, 199 at 53s, and 200 at 55s, then I should show the detections around 199 from 52s to 54s.</p>
-<p>The graph below shows that the time windows don&#39;t overlap.</p>
+<p>it injects a time point 1s before the first and s after the last so that they get a window that encloses them rather than being short changed.</p>
+<p>The graph below shows that the time windows don&#39;t overlap. It also shows that the windows aren&#39;t all the same duration.</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="c1">#build a list of times</span>
-<span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timePadding</span><span class="p">)]</span><span class="c1">#begining of time space</span>
-<span class="n">m</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>                                            <span class="c1">#all the detection times</span>
-<span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">richStickerData</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timePadding</span><span class="p">)]</span><span class="c1">#end of time space</span>
+<span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">liveSet</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timePadding</span><span class="p">)]</span><span class="c1">#begining of time space</span>
+<span class="n">m</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">liveSet</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>                                            <span class="c1">#all the detection times</span>
+<span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">liveSet</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">timePadding</span><span class="p">)]</span><span class="c1">#end of time space</span>
 <span class="n">mt</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="n">e</span> 
 
 <span class="n">timeWindows</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1009,264 +1136,254 @@ div#notebook {
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABIkAAAJMCAYAAAB+R/ZlAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAALEgAACxIB0t1+/AAAIABJREFUeJzs3Xm8dfd8L/DPNz0kSEUMGSTEnCiNeYgUW1pDLxqiVM2q
-qq2pt9pr6IvnSdGXoXVRvNpboVHU1BovxcVObgxFCEkTw20jhCa9hiBXjPneP9Z6Hoee53mSOPus
-M7zfr9d+2Xvttc/6xvM7v7PWZ/9+v1XdHQAAAAC2tr2mLgAAAACA6QmJAAAAABASAQAAACAkAgAA
-ACBCIgAAAAAiJAIAAAAgQiIAYAOqqmtV1beqqqauZYeqOqOq7nQZP/vKqvrT1a4JAODSEBIBAOte
-VZ1dVcfseN3dX+ruK3d3T1nXct190+4+eeo6AAAuKyERAAAAAEIiAGB9q6pXJbl2krePU8z+qKoO
-q6qLq2qvcZ8PVNUzq+qDVfXtqnprVV21ql5dVd+sqn+uqmsv+5lHVNV7quprVXVWVd1/F8eeVdWn
-l71+b1V9dNnrk6vq18bnO0c7VdW2qnp9VZ041nx6Vd1y2eduUVWnjrW9Lsk+P3XcR1fV56vqq1X1
-lqo6aNy+vapePD5fqqoLq+q54+t9quqiqrpKVe1dVX83fv4b43//NX7GfwoAYJMTEgEA61p3PyzJ
-F5Pca5xi9uc73vqpXX8jyYOTXDPJDZJ8KMkJSfZP8pkk25Kkqq6Y5D1JXp3k6kkemOSlVXXECof/
-SJIbjIHTUpJfTHJwVV2pqvZJcusku5pidu8kr02yX5K3J3npePzLJXlzkhOTXDXJG5Pcb8eHxqDp
-z5L8epKDx//2149vn5TkzuPz2yQ5L8mOdZDukOQz3X1BkocnuXKSQ8Zj/G6Si3ZRJwBAEiERALBx
-7GmR6ld29xe6+9tJ3pXkX7v7A919cYYg5hbjfvdKcnZ3v6oHn0ryj0n+02ii7v5uko9lCGJuleRT
-ST6Y5Ogkt0/yuTGUWckp3f3ucd2kv0ty5Lj9qCRL3f3i7v5Rd//DeIwdHpTkhO7+VHf/IMlTkxw1
-joT6cJIbVtX+Y00nJDlkDL7ulCFESpIfJLlakhuN/42f7O4L9/D/HwCwxS1NXQAAwCo5f9nzi1Z4
-ve/4/LAkt6+qr4+vK8nPZQhyVnJykrskOTfJPMk3ksySfC8/DmVWct6y599Jss84Pe7gJF/+qX3P
-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
-REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -1279,7 +1396,7 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="n">timeWindows</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
@@ -1293,7 +1410,7 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 
 <div class="output_html rendered_html output_subarea output_pyout">
 <div style="max-width:1500px;overflow:auto;">
@@ -1308,34 +1425,34 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
   </thead>
   <tbody>
     <tr>
-      <th>23</th>
-      <td>2016-11-06 02:22:02+00:00</td>
-      <td>23</td>
-      <td>2016-11-06 02:21:57.500000+00:00</td>
+      <th>226</th>
+      <td>2016-11-12 04:50:58+00:00</td>
+      <td>226</td>
+      <td>2016-11-12 04:50:54.500000+00:00</td>
     </tr>
     <tr>
-      <th>24</th>
-      <td>2016-11-06 02:22:06+00:00</td>
-      <td>24</td>
-      <td>2016-11-06 02:22:02+00:00</td>
+      <th>227</th>
+      <td>2016-11-12 04:51:02+00:00</td>
+      <td>227</td>
+      <td>2016-11-12 04:50:58+00:00</td>
     </tr>
     <tr>
-      <th>25</th>
-      <td>2016-11-06 02:22:10+00:00</td>
-      <td>25</td>
-      <td>2016-11-06 02:22:06+00:00</td>
+      <th>228</th>
+      <td>2016-11-12 04:51:05.500000+00:00</td>
+      <td>228</td>
+      <td>2016-11-12 04:51:02+00:00</td>
     </tr>
     <tr>
-      <th>26</th>
-      <td>2016-11-06 02:22:14.500000+00:00</td>
-      <td>26</td>
-      <td>2016-11-06 02:22:10+00:00</td>
+      <th>229</th>
+      <td>2016-11-12 04:51:09.500000+00:00</td>
+      <td>229</td>
+      <td>2016-11-12 04:51:05.500000+00:00</td>
     </tr>
     <tr>
-      <th>27</th>
-      <td>2016-11-06 02:22:17.500000+00:00</td>
-      <td>27</td>
-      <td>2016-11-06 02:22:14.500000+00:00</td>
+      <th>230</th>
+      <td>2016-11-12 04:51:12.500000+00:00</td>
+      <td>230</td>
+      <td>2016-11-12 04:51:09.500000+00:00</td>
     </tr>
   </tbody>
 </table>
@@ -1350,16 +1467,16 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="k">def</span> <span class="nf">timeSliced</span><span class="p">(</span><span class="n">timeWindow</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">savePlace</span><span class="p">,</span> <span class="n">contextDF</span><span class="p">):</span>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">timeSliced</span><span class="p">(</span><span class="n">timeWindow</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">savePlace</span><span class="p">,</span> <span class="n">contextDF</span><span class="p">,</span> <span class="n">personID</span><span class="o">=</span><span class="mi">304</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">timeCropDf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">timeWindow</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="p">(</span><span class="n">timeWindow</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">timeWindow</span><span class="o">.</span><span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
     
     <span class="n">timeFormatString</span> <span class="o">=</span> <span class="s2">&quot;%H:%M:%S&quot;</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Detections for person {} from {} to {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">personNumber</span><span class="p">,</span> 
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Detections for person {} from {} to {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">personID</span><span class="p">,</span> 
                                                             <span class="n">timeWindow</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeFormatString</span><span class="p">),</span> 
                                                             <span class="n">timeWindow</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeFormatString</span><span class="p">))</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
@@ -1371,6 +1488,7 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
     
     <span class="c1">#sticker dots</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">contextDF</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">contextDF</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">stickerLocations</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">stickerLocations</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
     
     <span class="c1">#the path</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">contextDF</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">contextDF</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s1">&#39;round&#39;</span><span class="p">)</span>
@@ -1401,15 +1519,27 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savePlace</span><span class="o">+</span><span class="s2">&quot;foo&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">timeWindow</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeFormatString</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
 
+</div>
+</div>
+</div>
 
-<span class="n">savePlace</span> <span class="o">=</span> <span class="s1">&#39;frames/test1/&#39;</span>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="n">savePlace</span> <span class="o">=</span> <span class="s1">&#39;frames/test1/&#39;</span>
 <span class="n">h</span><span class="o">.</span><span class="n">clearFolder</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">savePlace</span><span class="p">)</span>
 <span class="c1">#this takes quite a long time if you have a lot of frames</span>
 <span class="n">startStopwatch</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-
+<span class="k">print</span> <span class="n">startStopwatch</span>
 <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">timeWindows</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">timeSliced</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">bigdf</span><span class="p">,</span> <span class="n">savePlace</span><span class="p">,</span> <span class="n">richStickerData</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">index</span><span class="o">%</span><span class="k">10</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">index</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startStopwatch</span>
+    <span class="n">timeSliced</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">bigdf</span><span class="p">,</span> <span class="n">savePlace</span><span class="p">,</span> <span class="n">liveSet</span><span class="p">)</span>
 
 <span class="k">print</span> <span class="s2">&quot;That took&quot;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startStopwatch</span>
 </pre></div>
@@ -1425,7 +1555,32 @@ REQE8P+W3TekZbH7oQAAAABJRU5ErkJggg==
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-That took 0:00:15.048777
+2016-11-12 19:33:20.678720
+0 0:00:00.006415
+10 0:00:08.661120
+20 0:00:17.036675
+30 0:00:25.373347
+40 0:00:33.751483
+50 0:00:42.149384
+60 0:00:50.532759
+70 0:00:58.898568
+80 0:01:07.325978
+90 0:01:15.873870
+100 0:01:24.269555
+110 0:01:32.733264
+120 0:01:41.203313
+130 0:01:49.638374
+140 0:01:58.091713
+150 0:02:06.650352
+160 0:02:15.054518
+170 0:02:23.369715
+180 0:02:31.638526
+190 0:02:40.001758
+200 0:02:48.443045
+210 0:02:57.133575
+220 0:03:05.592932
+230 0:03:14.084356
+That took 0:03:14.903302
 
 </pre>
 </div>
@@ -1437,10 +1592,10 @@ That took 0:00:15.048777
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">h</span><span class="o">.</span><span class="n">makeGif</span><span class="p">(</span><span class="n">savePlace</span> <span class="o">+</span> <span class="s2">&quot;*.png&quot;</span><span class="p">,</span> <span class="s2">&quot;SampleWalk2&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span class="n">h</span><span class="o">.</span><span class="n">makeGif</span><span class="p">(</span><span class="n">savePlace</span> <span class="o">+</span> <span class="s2">&quot;*.png&quot;</span><span class="p">,</span> <span class="s2">&quot;SampleWalk3&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -1454,7 +1609,7 @@ That took 0:00:15.048777
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-convert -delay 20 -loop 0 frames/test1/*.png SampleWalk2.gif
+convert -delay 20 -loop 0 frames/test1/*.png SampleWalk3.gif
 
 </pre>
 </div>
@@ -1463,6 +1618,15 @@ convert -delay 20 -loop 0 frames/test1/*.png SampleWalk2.gif
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="SampleWalk3.gif" alt=""></p>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -1483,6 +1647,19 @@ convert -delay 20 -loop 0 frames/test1/*.png SampleWalk2.gif
 <p><img src="SampleWalk2.gif" alt=""></p>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
 </div>
     </div>
   </div>
