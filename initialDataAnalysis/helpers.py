@@ -117,17 +117,18 @@ def getSampleWalkData(url):
 def getTrainingWalkData(trainingWalkURLs, stickerLocations):
     trainingWalks = []
     for i, twURL in enumerate(trainingWalkURLs):
-        thisData = getSampleWalkData(twURL)
+        thisData = getSampleWalkData(twURL["url"])
         richStickerData = thisData.merge(stickerLocations,on="stickerID")
         richStickerData['time'] = richStickerData.apply(lambda x: sydTimeToUTC(dateutil.parser.parse(x.timeStamp, dayfirst=True)) , axis=1)
     #     richStickerData['sydtime'] = richStickerData.apply(lambda x: dateutil.parser.parse(x.timeStamp, dayfirst=True) , axis=1)
         richStickerData = richStickerData.drop(["timeStamp"], 1)
         richStickerData = richStickerData.sort_values("time", ascending=1)
+        richStickerData["minor"] = twURL["minor"]
 
-        print "{}: {} TO {} ({}) {} rows".format(i,richStickerData.time.min(),
-                                     richStickerData.time.max(),
-                                     richStickerData.time.max() - richStickerData.time.min(),
-                                     richStickerData.shape[0])
+        print "{}: {} TO {} ({}) {} rows".format(i, richStickerData.time.min(),
+                                                    richStickerData.time.max(),
+                                                    richStickerData.time.max() - richStickerData.time.min(),
+                                                    richStickerData.shape[0])
 
         trainingWalks.append(richStickerData)
     return trainingWalks
@@ -157,7 +158,7 @@ def robustRequest(request, headers, tries=10, timeoutSeconds=20):
                             print "{}\nfailed {} times".format(request, i+1), sys.exc_info()[1]
                             return False
 
-def nSecondWindows(stickerRecordingsRow, baseStationData, personID=304, chunkLength=5.0, chatty=True):
+def nSecondWindows(stickerRecordingsRow, baseStationData, chunkLength=5.0, chatty=True):
     try:
         startTime = datetime.datetime.now()
 
@@ -165,6 +166,7 @@ def nSecondWindows(stickerRecordingsRow, baseStationData, personID=304, chunkLen
         halfWindow = datetime.timedelta(seconds=chunkLength/2.0)
         ws = row.time - halfWindow
         we = row.time + halfWindow
+        personID = row.minor
         url = "http://ec2-52-65-111-92.ap-southeast-2.compute.amazonaws.com:3000"
         headers = {'authorization': "Basic ",# + key,
                    'content-type':  "application/json",
@@ -208,8 +210,9 @@ def nSecondWindows(stickerRecordingsRow, baseStationData, personID=304, chunkLen
         return "Something seriously pooped its pants"
 
 
-def timeSliced(fullRow, savePlace, contextDF, baseStationData, stickerLocations, personID=304):
+def timeSliced(fullRow, savePlace, contextDF, baseStationData, stickerLocations):
     df = fullRow.detections
+    personID = fullRow.minor
 
     fig, ax = plt.subplots()
 
