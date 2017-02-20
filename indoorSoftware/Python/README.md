@@ -3,3 +3,7 @@
 see [this](https://github.com/digistump/DigisparkExamplePrograms) github repo
 
 Path: DigisparkExamplePrograms/Python/DigiUSB/source/
+
+need modules:
+pyusb
+libusb
