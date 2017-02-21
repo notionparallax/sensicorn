@@ -12,7 +12,21 @@ I wrote some C code in the arduino IDE to do this.
 Here are the functions:
 
 ```
-//converts ADC pin votage to sound pressure levels
+//function converts resistance gain to gain in decibels
+double gaindBtogainR(double gainR){
+  //iRes the input resistor (constant in our case)
+  //gainR is the feedback gain in which we can change
+  //measure with multimeter
+  double iRes = 1000; //1 kOhm
+  gainR = gainR/iRes;
+  double gaindB = 20*log10(gainR);
+  //DigiUSB.println(gaindB);
+  return gaindB;
+}
+```
+
+```
+//function converts ADC pin votage to sound pressure levels
 //vADC is the analogread from the "envelope pin
 //gainR is the gain resistance in Ohms
 double vADCtoSPLdB(double vADC, double gainR){
@@ -40,4 +54,14 @@ double vADCtoSPLdB(double vADC, double gainR){
   return SPLdB;
 }
 ```
-k,.asdgh'.sdgh,l.kasgh
+
+call functions in "main" (in IDE in void loop)
+
+```
+  double vADC = analogRead(PIN_ANALOG_SOUND);
+  double gainR = 916000; //465 kOhm
+
+  double SPLdB = vADCtoSPLdB(vADC, gainR);
+  DigiUSB.println(SPLdB);
+  DigiUSB.delay(500); // Wait X ms
+```
