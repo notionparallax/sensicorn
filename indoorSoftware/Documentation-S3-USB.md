@@ -173,6 +173,8 @@ See Digispark [Connecting Pro](http://digistump.com/wiki/digispark/tutorials/con
 
 
 ###Neopixel
+Our RGB LED is the WS2812B or SK6812RGB.
+
 Do not use [Adafruit_Neopixel library](https://github.com/adafruit/Adafruit_NeoPixel)
 This library consumes too much RAM and thus cannot be used concurrently with the DigiUSB library.
 Use the [WS2812 Arduino library](https://github.com/cpldcpu/light_ws2812) (#include <WS2812.h>)
@@ -202,13 +204,17 @@ with the appropriate arduino code flashed onto the USB run python "read.py"
 	<pre>	sudo python read.py </pre>
 
 ##Writing to Neopixel
+Using WS2812 and DigiUSB library (see S3-write_np.ino in Arduin Code folder) The 
+###Too many sheep not enough RAM
+
 Cannot write to neopixel with DigiUSB library and adafruit_Neopixel library as they seem to be incompatible, potentially a RAM problem. 
+
 See this [github issue](https://github.com/digistump/DigisparkExamplePrograms/issues/4) for detail.
 
-Our RGB LED is the WS2812B or SK6812RGB
 
 
-##Too many sheep not enough RAM
+
+
 
 
 	
