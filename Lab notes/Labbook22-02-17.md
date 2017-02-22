@@ -1,6 +1,37 @@
 # Lab book 22/02/17
 
 ## Actions
+### Server style implementation
+Today I have cracked the issue with writing to digiUSB for the neopoxel/WS2812
+An error occured where more than 1 write (change colour) would crash the Sx3
+
+
+### problem along the way
+While attempting this Arduino crashed, and wouldn't reopen. 
+A Java error appeared when I ran `Arduino_debug.exe`
+```
+Loading configuration...
+Initializing packages...
+Preparing boards...
+java.io.FileNotFoundException: C:\Users\aiden\AppData\Roaming\Arduino15\preferences.txt (Access is denied)
+    at java.io.FileOutputStream.open0(Native Method)
+    at java.io.FileOutputStream.open(FileOutputStream.java:270)
+    at java.io.FileOutputStream.(FileOutputStream.java:213)
+    at java.io.FileOutputStream.(FileOutputStream.java:162)
+    at processing.app.legacy.PApplet.createWriter(PApplet.java:574)
+    at processing.app.PreferencesData.save(PreferencesData.java:115)
+    at processing.app.Base.(Base.java:343)
+    at processing.app.Base.guardedMain(Base.java:226)
+    at processing.app.Base.main(Base.java:137)
+java.lang.RuntimeException: Couldn't create a writer for C:\Users\aiden\AppData\Roaming\Arduino15\preferences.txt
+    at processing.app.legacy.PApplet.createWriter(PApplet.java:586)
+    at processing.app.PreferencesData.save(PreferencesData.java:115)
+    at processing.app.Base.(Base.java:343)
+    at processing.app.Base.guardedMain(Base.java:226)
+    at processing.app.Base.main(Base.java:137)
+```
+
+I found [this](https://forum.arduino.cc/index.php?topic=167553.60) Arduino forum, and following brillo's solution I deleted prefences.txt and Arduino opened! phew.
 
 
 
@@ -88,4 +119,4 @@ Resources: A [post](https://digistump.com/board/index.php?topic=1194.0) asking a
 
 
 ### future version
-anmometer for wind
+thermistor anmometer or hotwiring for wind
