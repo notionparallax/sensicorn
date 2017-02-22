@@ -1,6 +1,6 @@
 # Lab book 22/02/17
 
-# Actions
+## Actions
 
 
 
@@ -74,4 +74,12 @@ IT IS ALSO A VERY GOOD EXPLANATION OF THE ANALOG ELECTRONCICS WITH
 It is also a very good explanation of analogue electronics with **excellent graphics**.
 
 ### digiscope: graphing in real time
-I edited some python code to graph the 
+I edited some python code to graph the sound.
+See in /indoorSoftware/Python/Digiscope.py
+
+Seems to offset by 10 and potentially not as sensitive to instantaneuos peak noise.
+
+### Using blink(1)
+Resources: A [post](https://digistump.com/board/index.php?topic=1194.0) asking about the viability, it's insightful.
+           The blink(1) [github repo](https://github.com/todbot/blink1). It's massive! I need to have a very good long read
+           Blink(1) [website](https://blink1.thingm.com/)
