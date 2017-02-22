@@ -83,3 +83,9 @@ Seems to offset by 10 and potentially not as sensitive to instantaneuos peak noi
 Resources: A [post](https://digistump.com/board/index.php?topic=1194.0) asking about the viability, it's insightful.
            The blink(1) [github repo](https://github.com/todbot/blink1). It's massive! I need to have a very good long read
            Blink(1) [website](https://blink1.thingm.com/)
+
+
+
+
+### future version
+anmometer for wind
