@@ -16,6 +16,7 @@ Here are the functions:
 double gaindBtogainR(double gainR){
   //iRes the input resistor (constant in our case)
   //gainR is the feedback gain in which we can change
+  //gainR = Rf, iRes = Ri, arithmetic gain = Rf/Ri
   //measure with multimeter
   double iRes = 1000; //1 kOhm
   gainR = gainR/iRes;
@@ -37,13 +38,13 @@ double vADCtoSPLdB(double vADC, double gainR){
   double adcBits = 1023.00;
   
   double pascal1 = 94; // 1 Pascal in dB
-  double V = vADC*(vcc/adcBits);//0.004887586; //Volts
+  double V = (1/(2*sqrt(2)))*vADC*(vcc/adcBits);//0.004887586; //convert from adc to volts rms
   double sensitivity = -40; // dB
   double sensitivityV = pow(10,sensitivity/20); //Vrms/Pa 
   
   double VdB = 20*log10(V/sensitivityV);
   //DigiUSB.println(VdB);
-  double SPLdBunity = VdB + sensitivity + pascal1;
+  double SPLdBunity = VdB + sensitivity + pascal1 + 20*log10((vcc/2)/sensitivityV);
   //DigiUSB.println(SPLdBunity);
   double SPLdB = ((SPLdBunity) - (gaindB));
   if (SPLdBunity == gaindB){
@@ -65,3 +66,12 @@ call functions in "main" (in IDE in void loop)
   DigiUSB.println(SPLdB);
   DigiUSB.delay(500); // Wait X ms
 ```
+I've added 2.5V (in dB) with '+ 20*log10((vcc/2)/sensitivityV)'
+this is pretty bad science as the value calculated previously seems to be offset by that exact amount.
+
+There is some logic in it however, have a read on the answer to [this](http://electronics.stackexchange.com/questions/57824/how-do-i-get-5v-for-loud-noise-0v-for-silence-from-electret-microphone-or-oth)
+IT IS ALSO A VERY GOOD EXPLANATION OF THE ANALOG ELECTRONCICS WITH
+It is also a very good explanation of analogue electronics with **excellent graphics**.
+
+### digiscope: graphing in real time
+I edited some python code to graph the 
