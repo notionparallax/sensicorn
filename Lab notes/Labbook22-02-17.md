@@ -3,7 +3,10 @@
 ## Actions
 ### Server style implementation
 Today I have cracked the issue with writing to digiUSB for the neopoxel/WS2812
-An error occured where more than 1 write (change colour) would crash the Sx3
+An error occured where more than one write (change of colour) would crash the Sx3.
+I found [this issue](https://github.com/digistump/DigisparkExamplePrograms/issues/4) in DigisparkExamplePrograms.
+I had previously changed to using the [WS2812](https://github.com/cpldcpu/light_ws2812/tree/master/light_ws2812_Arduino) but had not attmepted to reduce ring buffer size in DigiUSB.cpp to 64 (as in the github issue).
+Having come back to the problem, I did this and can now change colour and request data in the same c program.
 
 
 ### problem along the way
