@@ -8,8 +8,10 @@ I found [this issue](https://github.com/digistump/DigisparkExamplePrograms/issue
 I had previously changed to using the [WS2812](https://github.com/cpldcpu/light_ws2812/tree/master/light_ws2812_Arduino) but had not attmepted to reduce ring buffer size in DigiUSB.cpp to 64 (as in the github issue).
 Having come back to the problem, I did this and can now change colour and request data in the same c program.
 
+The next step is reading a string so that any colour can be read, and messing with LED timings so fading/twinkling can be done.
 
-### problem along the way
+
+### Arduino crash
 While attempting this Arduino crashed, and wouldn't reopen. 
 A Java error appeared when I ran `Arduino_debug.exe`
 ```
