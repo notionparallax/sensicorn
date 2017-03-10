@@ -9,7 +9,7 @@ import send
 
 
 def receive():
-    time.sleep(1)
+    time.sleep(.25)
 
     try:
         theDevice = atmelUsbDevice(idVendor=0x16c0, idProduct=0x05df)

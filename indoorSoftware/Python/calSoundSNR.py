@@ -2,7 +2,6 @@
 import receive
 import send
 import sys
-import time
 
 
 def two_hex(intVal):
@@ -22,14 +21,32 @@ def get_temp():
     """Ask for a value from the thermistor."""
     send.send("t")
     send.send("t")
+    send.send("t")
+    receive.receive()
+
+def get_envelope():
+    """Ask for a value for the envelope value."""
+    send.send("e")
+    send.send("e")
+    send.send("e")
+    receive.receive()
+
+
+def get_sound():
+    """Ask for a value for the sound frequency value."""
+    send.send("s")
+    send.send("s")
+    send.send("s")
     receive.receive()
 
 
 sys.stdout.flush()
-for i in range(0, 250, 50):
+while(True):
+    get_envelope()
+    
+"""for i in range(0, 250, 50):
     for j in range(0, 250, 50):
         for k in range(0, 250, 50):
             val = sixChar(i, j, k)
             send.send("n" + val + "\n")
-            receive.receive()
-            #get_temp()
+            get_temp()"""
