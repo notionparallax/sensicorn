@@ -4,8 +4,12 @@
 import sys
 from usbdevice import atmelUsbDevice
 
+try:
+    args = sys.argv[1]+"\n"
+except Exception as e:
+    args = "BADA55"
 
-def send():
+def send(args=args):
     """Send a command to the sensicorn stampeed stick."""
     try:
         theDevice = atmelUsbDevice(idVendor=0x16c0, idProduct=0x05df)
@@ -13,7 +17,8 @@ def send():
         sys.exit("No DigiUSB Device Found")
 
     try:
-        user_input = sys.argv[1]+"\n"
+        user_input = args
+        print args
     except:
         exit("No data to send")
 

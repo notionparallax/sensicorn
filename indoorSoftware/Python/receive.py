@@ -1,43 +1,37 @@
 #/usr/bin/python
-
-#
-# Written for PyUSB 1.0 (w/libusb 1.0.3)
-#
+"""Written for PyUSB 1.0 (w/libusb 1.0.3)"""
 
 
-import usb # 1.0 not 0.4
-
-
+from usbdevice import atmelUsbDevice
 import sys
-sys.path.append("..")
+import time
+import send
 
-from arduino.usbdevice import ArduinoUsbDevice
 
 def receive():
+    time.sleep(1)
 
     try:
-        theDevice = ArduinoUsbDevice(idVendor=0x16c0, idProduct=0x05df)
+        theDevice = atmelUsbDevice(idVendor=0x16c0, idProduct=0x05df)
     except:
         sys.exit("No DigiUSB Device Found")
 
-
-
-
-    import sys
-    import time
-
-    while 1 == 1:
+    val = ""
+    while True:
         try:
             lastChar = chr(theDevice.read())
             if(lastChar == "\n"):
                 break
-            sys.stdout.write(lastChar)
+            # sys.stdout.write(lastChar)
+            val += lastChar
             sys.stdout.flush()
 
-            
-        except:
+        except Exception as e:
             # TODO: Check for exception properly
+            print "sreepu", e
             time.sleep(0.1)
+
+    print val.strip()
 
 if __name__ == "__main__":
     receive()
