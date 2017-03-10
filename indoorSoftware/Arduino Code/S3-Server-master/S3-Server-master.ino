@@ -130,7 +130,9 @@ void loop() {
   
   
   
-    if(DigiUSB.tx_remaining() == BUFFERSIZE) {
+    if(DigiUSB.available()){//DigiUSB.tx_remaining() == BUFFERSIZE) {
+      //DigiUSB.println();
+      //DigiUSB.println("nc");
       for(i = 0; i < SIZEOFINSTR; i++){
         cmd[i] = DigiUSB.read();
         
@@ -156,13 +158,18 @@ void loop() {
         printCnt++;
       } else if (cmd[0] == 'n'){        
          if(DigiUSB.available()){
+           //DigiUSB.print("CCN");
            npWrite(value, cmd);
            //clear cmd
            cmd[0] = '\0';
            printCnt = 0;
          }
-      } else if(!DigiUSB.available()){
-        DigiUSB.println("Busy");
+      } else if(DigiUSB.tx_remaining() != 0){
+        //DigiUSB.print("tx_R ");
+        //DigiUSB.println(DigiUSB.tx_remaining());
+        DigiUSB.print("NA ");
+        //DigiUSB.print("***");
+        DigiUSB.println(DigiUSB.available());
       }
     }
     
