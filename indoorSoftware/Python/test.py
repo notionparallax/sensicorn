@@ -26,6 +26,7 @@ def get_temp():
 
 
 sys.stdout.flush()
+
 for i in range(0, 250, 50):
     for j in range(0, 250, 50):
         for k in range(0, 250, 50):

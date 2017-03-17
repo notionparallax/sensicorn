@@ -103,22 +103,9 @@ void npWrite(cRGB value, char * cmd){
     
 }
 
-double Thermister(int RawADC) {  //Function to perform the fancy math of the Steinhart-Hart equation
-  double Temp;
-  int R = 10000;
-  double Aone = 0.003354016;
-  double Bone = 0.0002569850;
-  double Cone = 0.000002620131;
-  double Done = 0.00000006383091;
-   Temp = log((5500)*((1024/RawADC) - 1));
-   //Temp = 1 / (Aone + (Bone*Temp) + (Cone * Temp*Temp) + (Done*Temp*Temp* Temp) );
-   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
-  
-  Temp = Temp - 273.15;              // Convert Kelvin to Celsius
-  
-  return Temp;
-}
-
+//declare reset function @ address 0
+//
+void(* resetFunc) (void) = NULL; 
 void loop() {
   
 
@@ -164,12 +151,16 @@ void loop() {
            cmd[0] = '\0';
            printCnt = 0;
          }
+      } else if (cmd[0] == 'r'){
+          resetFunc();
       } else if(DigiUSB.tx_remaining() != 0){
         //DigiUSB.print("tx_R ");
         //DigiUSB.println(DigiUSB.tx_remaining());
-        DigiUSB.print("NA ");
+        //DigiUSB.print("NA ");
         //DigiUSB.print("***");
-        DigiUSB.println(DigiUSB.available());
+        //DigiUSB.println(DigiUSB.available());
+        DigiUSB.println();
+        //DigiUSB.delay(1000);
       }
     }
     
