@@ -10,12 +10,22 @@ Version: 20091021
 
 Assumes 'UsbStreamDemo1.pde' is loaded on Arduino and
 LEDs are present on pins 11, 12 and 13.
+
+***
+Further extended by Ben Doherty and Aiden Ray 2017
 """
 
 # import usb  # 1.0 not 0.4
 from usbdevice import atmelUsbDevice
 import sys
 import time
+
+
+def ensure_end(a_string, end):
+    if a_string.endswith(end):
+        return a_string
+    else:
+        return "{}\n".format(a_string)
 
 
 def read():
@@ -25,7 +35,7 @@ def read():
                                    idProduct=0x05df)
 
         # It would be:
-        # print "f Found: 0x{idVendor:04x} 0x{idProduct:04x} {productName} {manufacturer}".format(**theDevice)
+        # print "Found: 0x{idVendor:04x} 0x{idProduct:04x} {productName} {manufacturer}".format(**theDevice)
         # If it were a dictionary. I don't have my s×3 on me to check
         print "Found: 0x%04x 0x%04x %s %s" % (theDevice.idVendor,
                                               theDevice.idProduct,
@@ -57,10 +67,10 @@ def send(args):
     except:
         sys.exit("No DigiUSB Device Found")
 
-    try:
-        user_input = args
+    if args:
+        user_input = ensure_end(args, "\n")
         print args
-    except:
+    else:
         exit("No data to send")
 
     for c in user_input:
