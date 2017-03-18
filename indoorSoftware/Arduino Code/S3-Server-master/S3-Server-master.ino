@@ -64,7 +64,6 @@ void setup() {
 void npWrite(cRGB value, char * cmd){
 
     //convert strings to bytes data type
-    //THIS DOES AS EXPECTED
     for (i = 1; i < SIZEOFINSTR; i++){
       if (cmd[i] >= '0' && cmd[i] <= '9') {
            cmdb[i-1] = byte(cmd[i] - '0');    
@@ -106,6 +105,7 @@ void npWrite(cRGB value, char * cmd){
 //declare reset function @ address 0
 //
 void(* resetFunc) (void) = NULL; 
+
 void loop() {
   
 
@@ -157,10 +157,7 @@ void loop() {
         //DigiUSB.print("tx_R ");
         //DigiUSB.println(DigiUSB.tx_remaining());
         //DigiUSB.print("NA ");
-        //DigiUSB.print("***");
-        //DigiUSB.println(DigiUSB.available());
         DigiUSB.println();
-        //DigiUSB.delay(1000);
       }
     }
     
