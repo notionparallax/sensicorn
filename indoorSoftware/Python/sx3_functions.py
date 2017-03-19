@@ -1,4 +1,5 @@
 # /usr/bin/python
+# -*- coding: utf-8 -*-
 """
 Written for PyUSB 1.0 (w/libusb 1.0.3)
 
@@ -8,10 +9,10 @@ Author: follower@rancidbacon.com
 
 Version: 20091021
 
-Assumes 'UsbStreamDemo1.pde' is loaded on Arduino and
-LEDs are present on pins 11, 12 and 13.
 
 ***
+Assumes 'S3-Server-Master.ino' is loaded on Sx3
+
 Further extended by Ben Doherty and Aiden Ray 2017
 """
 
@@ -35,7 +36,7 @@ def read():
                                    idProduct=0x05df)
 
         # It would be:
-        # print "Found: 0x{idVendor:04x} 0x{idProduct:04x} {productName} {manufacturer}".format(**theDevice)
+        #print "Found: 0x{idVendor:04x} 0x{idProduct:04x} {productName} {manufacturer}".format(**theDevice)
         # If it were a dictionary. I don't have my s×3 on me to check
         print "Found: 0x%04x 0x%04x %s %s" % (theDevice.idVendor,
                                               theDevice.idProduct,
