@@ -28,7 +28,7 @@ def receive():
 
         except Exception as e:
             # TODO: Check for exception properly
-            #print "sreepu", e
+            print "sreepu", e
             time.sleep(0.1)
 
     print val.strip()
