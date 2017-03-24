@@ -22,6 +22,17 @@ adding r as a send option for reset in the firmware, software reset is now possi
 (see here)[http://razzpisampler.oreilly.com/ch10.html]
 (and here)[https://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting]
 
+error: 
+```Arduino: 1.8.1 (Linux), Board: "Digispark Pro (Default 16 Mhz)"
+
+fork/exec /home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++: no such file or directory
+Error compiling for board Digispark Pro (Default 16 Mhz).
+
+This report would have more information with
+"Show verbose output during compilation"
+option enabled in File -> Preferences.
+``` 
+
 ## Make space on the Raspberry Pi
 The Pi ran out of space!
 
