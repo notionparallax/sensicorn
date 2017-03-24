@@ -13,8 +13,14 @@ Using a 1 line function 'void(* resetFunc) (void) = NULL;
 
 adding r as a send option for reset in the firmware, software reset is now possible.
 
+## Arduino from commandline
+(https://github.com/arduino/arduino-builder)[https://github.com/arduino/arduino-builder]
+
 ## How to install arduino software
-.json file etc. (to copmplete)
+.json file etc. (to complete)
+
+(see here)[http://razzpisampler.oreilly.com/ch10.html]
+(and here)[https://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting]
 
 ## Make space on the Raspberry Pi
 The Pi ran out of space!
