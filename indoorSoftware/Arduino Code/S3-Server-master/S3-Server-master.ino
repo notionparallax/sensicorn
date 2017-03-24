@@ -1,4 +1,4 @@
-  /*
+/*
  * Sx3 arduino master code
  *
  * Created: 22.02.2017 2:30:00
@@ -128,13 +128,13 @@ void loop() {
       if(cmd[0] == 't'){
         //for(i = 0; i < NUMPRINT; i++){
           DigiUSB.print(temperatureADC);
-          DigiUSB.println("t\t");
+          DigiUSB.println("t");
         //}
         printCnt++;
       } else if(cmd[0] == 'e') { 
         //for(i = 0; i < NUMPRINT; i++){
           DigiUSB.print(envelope);
-          DigiUSB.println("e\t");
+          DigiUSB.println("e");
         //}
         printCnt++;
       } else if(cmd[0] == 's') {

@@ -110,7 +110,7 @@ elif sys.argv[1] == "receive":
     receive()
 elif sys.argv[1] == "send":
     try:
-        args = sys.argv[2]+"\n"
+        args = sys.argv[2] + "\n"
     except Exception as e:
         args = "BADA55"
     send(args)
