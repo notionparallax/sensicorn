@@ -16,7 +16,7 @@ adding r as a send option for reset in the firmware, software reset is now possi
 ## Arduino from commandline
 (https://github.com/arduino/arduino-builder)[https://github.com/arduino/arduino-builder]
 
-## How to install arduino software
+## How to install arduino software for RPI
 .json file etc. (to complete)
 
 [see here](http://razzpisampler.oreilly.com/ch10.html)
@@ -32,7 +32,13 @@ This report would have more information with
 "Show verbose output during compilation"
 option enabled in File -> Preferences.
 ```
-
+no avrdude.conf file to edit
+try:
+```this
+git clone https://github.com/onandoffables/avrpi-tools
+cd avrpi-tools
+./setup
+```
 ## add serial number to Sx3
 UNos have a serial number (SN in board info)
 
