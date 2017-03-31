@@ -23,16 +23,16 @@ void setup() {
 
 void loop() {
   // For a set of NeoPixels the first NeoPixel is 0, second is 1, all the way up to the count of pixels minus one.
-  
+
     // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
     //purple
-    pixels.setPixelColor(NUMPIXELS-1, pixels.Color(5,50,75)); // Moderately bright green color.
+    pixels.setPixelColor(NUMPIXELS-1, pixels.Color(0,50,0)); // Moderately bright green color.
     pixels.show(); // This sends the updated pixel color to the hardware.
     delay(delayval); // Delay for a period of time (in milliseconds).
 
     //Yellow
-    pixels.setPixelColor(NUMPIXELS-1, pixels.Color(50,50,0)); // Moderately bright green color.
+    pixels.setPixelColor(NUMPIXELS-1, pixels.Color(0,0,50)); // Moderately bright green color.
     pixels.show(); // This sends the updated pixel color to the hardware.
     delay(delayval); // Delay for a period of time (in milliseconds).
-  
+
 }
