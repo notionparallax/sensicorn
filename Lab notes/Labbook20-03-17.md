@@ -39,6 +39,9 @@ git clone https://github.com/onandoffables/avrpi-tools
 cd avrpi-tools
 ./setup
 ```
+more on the g++ issue
+```https://github.com/arduino/Arduino/issues/3334
+```
 ## add serial number to Sx3
 UNos have a serial number (SN in board info)
 
