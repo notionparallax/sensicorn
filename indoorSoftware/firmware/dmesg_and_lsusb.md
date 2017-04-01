@@ -37,3 +37,4 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 [ 9834.841480] usb 1-1-port2: unable to enumerate USB device
 
 ```
+usr/bin/avrdude -p attiny167 -c arduino -C /etc/avrdude.conf -b 19200 -P [not sure] -U flash:w:[MyHexFile.ino.hex]:i
