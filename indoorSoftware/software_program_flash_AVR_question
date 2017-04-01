@@ -49,7 +49,8 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
  ```
 
- udev rules
+ #### udev rules
+[tutorial for udev rules by digistump](http://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting)
 
  ### AVR Device
 
@@ -58,6 +59,7 @@ hints it may not be possible,
 however this issue may have been resolved, as I am using an attiny167 (rather than 85),
 and the Pi does not reboot on the USB being plugged in.
 
+udev rules were incorrect? changed from 16d0 and 0753 to 16c0,05df
 
 `dmesg`
 ```
@@ -91,13 +93,16 @@ on windows it is com 6
 
 ```
 'which avrdude': /usr/bin.avrdude
-
+```
 
 The Pis are update periodically with a crontab and shell script
 on start up
 
 ## Serial port
-
+```
+usr/bin/avrdude -p attiny167 -c arduino -C /etc/avrdude.conf -b 19200 -P [not sure] -U flash:w:[MyHexFile.ino.hex]:i
+```
+serial appears with uno and ttyACMO in /dev, not for the AVR device
 
 I have updated the configuration file `avrdude.conf` to include the attiny167,
 as I did with my windows 10 machine.
