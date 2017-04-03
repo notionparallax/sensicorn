@@ -5,9 +5,6 @@ I am trying to flash a program onto an attiny167
 with a Raspberry Pi via avrdude and USB.
 
 
-
-
-
 ## Background
 I have 50 Raspberry Pi 3B's connected to an amazon server collecting data.
 
@@ -50,16 +47,38 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  ```
 
  #### udev rules
+I have followed the
 [tutorial for udev rules by digistump](http://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting)
+and placed the filed at /etc/udev/rules.d/49-micronucleus.rules
+
+UDEV of [tinseey](https://www.pjrc.com/teensy/49-teensy.rules) (similar to bootloaded micronucleus for attiny167)
+```
+ViD: 16c0
+PiD: 04[789B]?
+
+```
+UDEV given by tutorial:
+```
+ViD: 16d0
+PiD: 0753
+```
+---
+- udev rules were incorrect? changed from 16d0 and 0753 to 16c0,05df
+- place udev rules in /lib/udev/rules.d/49-micronucleus.rules
+- try differnt VID and PID
+- - purpose of udev rules
+---
+I do not fully understand the reason for the udev rules
+
+
+
 
  ### AVR Device
 
 [this post](http://www.raspberry-pi-geek.com/Archive/2014/03/Adding-analog-input-to-the-Pi-using-the-Digispark/(offset)/2)
 hints it may not be possible,
-however this issue may have been resolved, as I am using an attiny167 (rather than 85),
+however this issue may have been resolved, as I am using an attiny167 (rather than an 85),
 and the Pi does not reboot on the USB being plugged in.
-
-udev rules were incorrect? changed from 16d0 and 0753 to 16c0,05df
 
 `dmesg`
 ```
@@ -80,6 +99,7 @@ udev rules were incorrect? changed from 16d0 and 0753 to 16c0,05df
 [ 9834.841480] usb 1-1-port2: unable to enumerate USB device
 
 ```
+
 
 ## Arduino IDE
 ``` avr-g++ error```
