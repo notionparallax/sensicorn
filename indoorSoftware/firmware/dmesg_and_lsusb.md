@@ -38,3 +38,19 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
 ```
 usr/bin/avrdude -p attiny167 -c arduino -C /etc/avrdude.conf -b 19200 -P [not sure] -U flash:w:[MyHexFile.ino.hex]:i
+
+error message arduino IDE
+```
+
+/home/pi/Downloads/arduino-1.8.1/arduino-builder -dump-prefs -logger=machine -hardware /home/pi/Downloads/arduino-1.8.1/hardware -hardware /home/pi/.arduino15/packages -tools /home/pi/Downloads/arduino-1.8.1/tools-builder -tools /home/pi/Downloads/arduino-1.8.1/hardware/tools/avr -tools /home/pi/.arduino15/packages -built-in-libraries /home/pi/Downloads/arduino-1.8.1/libraries -libraries /home/pi/Arduino/libraries -fqbn=digistump:avr:digispark-tiny -ide-version=10801 -build-path /tmp/arduino_build_279218 -warnings=none -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.micronucleus.path=/home/pi/.arduino15/packages/digistump/tools/micronucleus/2.0a4 -prefs=runtime.tools.avr-gcc.path=/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5 -verbose /home/pi/sensicorn/sensicorn/indoorSoftware/Arduino Code/neopixel_simple/neopixel_simple.ino
+/home/pi/Downloads/arduino-1.8.1/arduino-builder -compile -logger=machine -hardware /home/pi/Downloads/arduino-1.8.1/hardware -hardware /home/pi/.arduino15/packages -tools /home/pi/Downloads/arduino-1.8.1/tools-builder -tools /home/pi/Downloads/arduino-1.8.1/hardware/tools/avr -tools /home/pi/.arduino15/packages -built-in-libraries /home/pi/Downloads/arduino-1.8.1/libraries -libraries /home/pi/Arduino/libraries -fqbn=digistump:avr:digispark-tiny -ide-version=10801 -build-path /tmp/arduino_build_279218 -warnings=none -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.micronucleus.path=/home/pi/.arduino15/packages/digistump/tools/micronucleus/2.0a4 -prefs=runtime.tools.avr-gcc.path=/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5 -verbose /home/pi/sensicorn/sensicorn/indoorSoftware/Arduino Code/neopixel_simple/neopixel_simple.ino
+Using board 'digispark-tiny' from platform in folder: /home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7
+Using core 'tiny' from platform in folder: /home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7
+Detecting libraries used...
+"/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++" -c -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections  -w -x c++ -E -CC -mmcu=attiny85 -DF_CPU=16500000L -DARDUINO=10801 -DARDUINO_AVR_DIGISPARK -DARDUINO_ARCH_AVR  "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/cores/tiny" "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/variants/digispark" "/tmp/arduino_build_279218/sketch/neopixel_simple.ino.cpp" -o "/dev/null"
+Generating function prototypes...
+"/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++" -c -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections  -w -x c++ -E -CC -mmcu=attiny85 -DF_CPU=16500000L -DARDUINO=10801 -DARDUINO_AVR_DIGISPARK -DARDUINO_ARCH_AVR  "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/cores/tiny" "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/variants/digispark" "/tmp/arduino_build_279218/sketch/neopixel_simple.ino.cpp" -o "/tmp/arduino_build_279218/preproc/ctags_target_for_gcc_minus_e.cpp"
+fork/exec /home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++: no such file or directory
+Error compiling for board Digispark (Default - 16.5mhz).
+
+```
