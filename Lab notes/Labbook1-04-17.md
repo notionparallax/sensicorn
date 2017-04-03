@@ -1,3 +1,4 @@
+
 # Software flashing  attiny167 from RPi with avrdude
 ## abstract
 I am trying to flash a program onto an attiny167
@@ -49,7 +50,7 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  #### udev rules
 I have followed the
 [tutorial for udev rules by digistump](http://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting)
-and placed the filed at /etc/udev/rules.d/49-micronucleus.rules
+and placed the file at /etc/udev/rules.d/49-micronucleus.rules
 
 UDEV of [tinseey](https://www.pjrc.com/teensy/49-teensy.rules) (similar to bootloaded micronucleus for attiny167)
 ```
