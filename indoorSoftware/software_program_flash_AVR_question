@@ -1,11 +1,10 @@
 # Software flashing  attiny167 from RPi with avrdude
-## abstract
 I am trying to flash a program onto an attiny167
 (already bootloaded with the [micronucleus bootloader](https://github.com/micronucleus/micronucleus))
 with a Raspberry Pi via avrdude and USB.
 
 
-## Background
+# Background
 I have 50 Raspberry Pi 3B's connected to an amazon server collecting data.
 
 I have 50 custom attiny167 based USB sensor PCBs which I will connect to the Pis
@@ -15,7 +14,7 @@ and I thus need to be able to reflash a program to them via the commandline of a
 
 I have bootloaded them all from my windows 10 machine and can flash any program via USB.
 
- ### RPis
+# RPis
  I have flashed programs from the RPi with an Arduino Uno, both with the IDE and avrdude.
  Arduino and avrdude are installed and working (installed both with apt-get).
 
@@ -25,7 +24,7 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  The pre-flashed program then runs and lsusb shows no device:
 
  **`lsusb` immediately after device is plugged into port**
- ```
+<pre>
  pi@raspberrypi:/usr/bin $ lsusb
  Bus 001 Device 005: ID 046d:c077 Logitech, Inc.
  Bus 001 Device 006: ID 413c:2011 Dell Computer Corp. Multimedia Pro Keyboard
@@ -34,9 +33,9 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
  Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp.
  Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-  ```
+</pre>
  **`lsusb` ~5 seconds after device is plugged into port**
- ```
+<pre>
  pi@raspberrypi:/usr/bin $ lsusb
  Bus 001 Device 005: ID 046d:c077 Logitech, Inc.
  Bus 001 Device 006: ID 413c:2011 Dell Computer Corp. Multimedia Pro Keyboard
@@ -44,44 +43,26 @@ I have bootloaded them all from my windows 10 machine and can flash any program 
  Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
  Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp.
  Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
- ```
+</pre>
 
- #### udev rules
+### udev rules
 I have followed the
 [tutorial for udev rules by digistump](http://digistump.com/wiki/digispark/tutorials/linuxtroubleshooting)
-and placed the filed at /etc/udev/rules.d/49-micronucleus.rules
+and placed the file at /etc/udev/rules.d/49-micronucleus.rules
 
 UDEV of [tinseey](https://www.pjrc.com/teensy/49-teensy.rules) (similar to bootloaded micronucleus for attiny167)
-```
-ViD: 16c0
-PiD: 04[789B]?
-
-```
-UDEV given by tutorial:
-```
-ViD: 16d0
-PiD: 0753
-```
----
-- udev rules were incorrect? changed from 16d0 and 0753 to 16c0,05df
-- place udev rules in /lib/udev/rules.d/49-micronucleus.rules
-- try differnt VID and PID
-- - purpose of udev rules
----
-I do not fully understand the reason for the udev rules
 
 
-
-
- ### AVR Device
+# AVR Device
 
 [this post](http://www.raspberry-pi-geek.com/Archive/2014/03/Adding-analog-input-to-the-Pi-using-the-Digispark/(offset)/2)
 hints it may not be possible,
 however this issue may have been resolved, as I am using an attiny167 (rather than an 85),
 and the Pi does not reboot on the USB being plugged in.
 
+On using dmesg you can see it is unable to enumerate.
 `dmesg`
-```
+<pre>
 [ 9820.701327] usb 1-1.2: new low-speed USB device number 7 using dwc_otg
 [ 9820.803813] usb 1-1.2: New USB device found, idVendor=16d0, idProduct=0753
 [ 9820.803838] usb 1-1.2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
@@ -98,38 +79,59 @@ and the Pi does not reboot on the USB being plugged in.
 [ 9834.841371] usb 1-1.2: device not accepting address 11, error -71
 [ 9834.841480] usb 1-1-port2: unable to enumerate USB device
 
-```
+</pre>
 
 
-## Arduino IDE
-``` avr-g++ error```
-install of json file
-no serial port shown vs Arduin UNO ttyACM0
-on windows it is com 6
-`which avr-g++`: /usr/bin/avr-g++
 
-## avrdude
-```C:\Program Files (x86)\Arduino\hardware\tools\avr\bin>avrdude -p attiny167 -c arduino -P COM6 -b 19200 -U lfuse:w:0xff:m -U hfuse:w:0xdf:m -U efuse:w:0xfe:m -U flash:w:ProBootloaderR2.hex:i```
+# avrdude
+I'm using the command, with different serial ports
+<pre>
+usr/bin/avrdude -p attiny167 -c arduino -C /etc/avrdude.conf -b 19200 -P [COM PORT] -U flash:w:[MyHexFile.ino.hex]:i
+</pre>
+this gives the error
+<pre>
+avrdude: ser_open(): can't open device "[COM PORT]": No such file or directory
 
-```
-'which avrdude': /usr/bin.avrdude
-```
-
-The Pis are update periodically with a crontab and shell script
-on start up
-
-## Serial port
-```
-usr/bin/avrdude -p attiny167 -c arduino -C /etc/avrdude.conf -b 19200 -P [not sure] -U flash:w:[MyHexFile.ino.hex]:i
-```
-serial appears with uno and ttyACMO in /dev, not for the AVR device
+avrdude done.  Thank you.
+</pre>
+The same method works with the Uno on the Pi, and the AVR device on my windows 10 machines.
 
 I have updated the configuration file `avrdude.conf` to include the attiny167,
 as I did with my windows 10 machine.
-## other heading
-prefereably I would continue using the micronucleus as the bootloader as USB compatibility is essential.
-However, if you think there is a more suitable bootloader (optiboot?)
-I would consider changing.
+
+# Serial port
+
+serial and ttyACMO appears with Uno in /dev, not for the AVR device.
+
+
+
+# Arduino IDE
+I've attempted to do this through the IDE but get the error:
+<pre>
+/home/pi/Downloads/arduino-1.8.1/arduino-builder -dump-prefs -logger=machine -hardware /home/pi/Downloads/arduino-1.8.1/hardware -hardware /home/pi/.arduino15/packages -tools /home/pi/Downloads/arduino-1.8.1/tools-builder -tools /home/pi/Downloads/arduino-1.8.1/hardware/tools/avr -tools /home/pi/.arduino15/packages -built-in-libraries /home/pi/Downloads/arduino-1.8.1/libraries -libraries /home/pi/Arduino/libraries -fqbn=digistump:avr:digispark-tiny -ide-version=10801 -build-path /tmp/arduino_build_279218 -warnings=none -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.micronucleus.path=/home/pi/.arduino15/packages/digistump/tools/micronucleus/2.0a4 -prefs=runtime.tools.avr-gcc.path=/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5 -verbose /home/pi/sensicorn/sensicorn/indoorSoftware/Arduino Code/neopixel_simple/neopixel_simple.ino
+/home/pi/Downloads/arduino-1.8.1/arduino-builder -compile -logger=machine -hardware /home/pi/Downloads/arduino-1.8.1/hardware -hardware /home/pi/.arduino15/packages -tools /home/pi/Downloads/arduino-1.8.1/tools-builder -tools /home/pi/Downloads/arduino-1.8.1/hardware/tools/avr -tools /home/pi/.arduino15/packages -built-in-libraries /home/pi/Downloads/arduino-1.8.1/libraries -libraries /home/pi/Arduino/libraries -fqbn=digistump:avr:digispark-tiny -ide-version=10801 -build-path /tmp/arduino_build_279218 -warnings=none -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.micronucleus.path=/home/pi/.arduino15/packages/digistump/tools/micronucleus/2.0a4 -prefs=runtime.tools.avr-gcc.path=/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5 -verbose /home/pi/sensicorn/sensicorn/indoorSoftware/Arduino Code/neopixel_simple/neopixel_simple.ino
+Using board 'digispark-tiny' from platform in folder: /home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7
+Using core 'tiny' from platform in folder: /home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7
+Detecting libraries used...
+"/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++" -c -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections  -w -x c++ -E -CC -mmcu=attiny85 -DF_CPU=16500000L -DARDUINO=10801 -DARDUINO_AVR_DIGISPARK -DARDUINO_ARCH_AVR  "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/cores/tiny" "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/variants/digispark" "/tmp/arduino_build_279218/sketch/neopixel_simple.ino.cpp" -o "/dev/null"
+Generating function prototypes...
+"/home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++" -c -g -Os -w -fno-exceptions -ffunction-sections -fdata-sections  -w -x c++ -E -CC -mmcu=attiny85 -DF_CPU=16500000L -DARDUINO=10801 -DARDUINO_AVR_DIGISPARK -DARDUINO_ARCH_AVR  "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/cores/tiny" "-I/home/pi/.arduino15/packages/digistump/hardware/avr/1.6.7/variants/digispark" "/tmp/arduino_build_279218/sketch/neopixel_simple.ino.cpp" -o "/tmp/arduino_build_279218/preproc/ctags_target_for_gcc_minus_e.cpp"
+
+fork/exec /home/pi/.arduino15/packages/arduino/tools/avr-gcc/4.8.1-arduino5/bin/avr-g++: no such file or directory
+Error compiling for board Digispark (Default - 16.5mhz).
+</pre>
+
+when I type `which avr-g++`: /usr/bin/avr-g++, this is just a copy from my windows machine.
+I found this [github issue](https://github.com/Robot-Will/Stino/issues/275)
+and it seems to be irrelevant for now, just a path issue.
+
+I've had to use a custom json file for the board manager to find micronucleus and Digispark Pro.
+
+When I plug in the AVR device no new serial port is shown in Tools->Port (unlike Arduino UNO, ttyACM0 appears).
+
+I'd much prefer to do flash via avrdude or similar on the commandline, so I have not focused on this.
 
 ---
-Question
+# My question
+Is it possible to flash the AVR device with a Raspberry Pi over USB?
+If so, what am I doing wrong?
