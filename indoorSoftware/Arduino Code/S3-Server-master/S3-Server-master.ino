@@ -31,7 +31,7 @@
 #define BUFFERSIZE          64  //DO NOT CHANGE UNLESS CHANGED IN digiusb.h
                                 //Size of USB buffer in which data is read from                                
 #define DELAYTIME           10  //delay time in milliseconds
-#define NUMPRINT            4   //number of analogue values to print (nd thus average)
+#define NUMPRINT            3   //number of analogue values to print (nd thus average)
 
 #define SERIESRESISTOR 10000
 
@@ -107,16 +107,7 @@ void npWrite(cRGB value, char * cmd){
 void(* resetFunc) (void) = NULL; 
 
 void loop() {
-  
-
-
-  temperatureADC = analogRead(PIN_ANALOG_TEMP ); //corresponds to P3
-  //temperature = Thermister(temperatureADC); 
-  sound = analogRead(PIN_ANALOG_SOUND);
-  envelope = analogRead(PIN_ANALOG_ENVELOPE);
-  
-  
-  
+    
     if(DigiUSB.available()){//DigiUSB.tx_remaining() == BUFFERSIZE) {
       //DigiUSB.println();
       //DigiUSB.println("nc");
@@ -127,21 +118,28 @@ void loop() {
       //DigiUSB.println(cmd);
       if(cmd[0] == 't'){
         //for(i = 0; i < NUMPRINT; i++){
+          temperatureADC = analogRead(PIN_ANALOG_TEMP ); //corresponds to P3
           DigiUSB.print(temperatureADC);
           DigiUSB.println("t");
         //}
         printCnt++;
       } else if(cmd[0] == 'e') { 
-        //for(i = 0; i < NUMPRINT; i++){
+        for(i = 0; i < NUMPRINT; i++){
+          envelope = analogRead(PIN_ANALOG_ENVELOPE);
           DigiUSB.print(envelope);
-          DigiUSB.println("e");
-        //}
+          DigiUSB.print("e   ");
+          DigiUSB.delay(10);
+        }
+        DigiUSB.println();
         printCnt++;
       } else if(cmd[0] == 's') {
-        //for(i = 0; i < NUMPRINT; i++){
+        for(i = 0; i < NUMPRINT; i++){
+          sound = analogRead(PIN_ANALOG_SOUND);
           DigiUSB.print(sound);
-          DigiUSB.println("s");
-        //}
+          DigiUSB.print("s   ");
+          DigiUSB.delay(10);
+        }
+        DigiUSB.println();
         printCnt++;
       } else if (cmd[0] == 'n'){        
          if(DigiUSB.available()){

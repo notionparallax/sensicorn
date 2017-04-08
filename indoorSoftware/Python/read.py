@@ -30,14 +30,21 @@ def read():
                                               theDevice.manufacturer)
     except:
         pass
-
+    max_val = 0
     while True:
+    # for i in range(1,1000):
         try:
             theDevice = atmelUsbDevice(idVendor=0x16c0,
                                        idProduct=0x05df)
             try:
-                sys.stdout.write(chr(theDevice.read()))
-                sys.stdout.flush()
+                # sys.stdout.write(type(theDevice.read()))
+                val = theDevice.read()
+                if val > max_val:
+                    max_val = val
+                eq = "|" * int(val * 0.6)
+                print(eq)
+
+                # sys.stdout.flush()
             except:
                 # TODO: Check for exception properly
                 time.sleep(0.5)

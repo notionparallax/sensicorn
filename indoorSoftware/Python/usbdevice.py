@@ -63,7 +63,7 @@ class atmelUsbDevice(object):
     def read(self):
         response = self._transfer(REQUEST_TYPE_RECEIVE, USBRQ_HID_GET_REPORT,
                                   0,  # ignored
-                                  1)  # length
+                                  16)  # length
 
         if not response:
             raise Exception("No Data")
