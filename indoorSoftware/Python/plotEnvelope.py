@@ -7,7 +7,7 @@ from scipy import signal
 
 with open('soundTest.txt') as soundFile:
   sound = [ int(i) for i in soundFile ]
-
+sound = array(sound)
 plt.figure(1)
 plt.title('Sound Envelope.')
 plt.plot(sound)
