@@ -1,4 +1,4 @@
-  /*
+/*
  * Sx3 arduino master code
  *
  * Created: 22.02.2017 2:30:00
@@ -31,7 +31,7 @@
 #define BUFFERSIZE          64  //DO NOT CHANGE UNLESS CHANGED IN digiusb.h
                                 //Size of USB buffer in which data is read from                                
 #define DELAYTIME           10  //delay time in milliseconds
-#define NUMPRINT            4   //number of analogue values to print (nd thus average)
+#define NUMPRINT            3   //number of analogue values to print (nd thus average)
 
 #define SERIESRESISTOR 10000
 
@@ -64,7 +64,6 @@ void setup() {
 void npWrite(cRGB value, char * cmd){
 
     //convert strings to bytes data type
-    //THIS DOES AS EXPECTED
     for (i = 1; i < SIZEOFINSTR; i++){
       if (cmd[i] >= '0' && cmd[i] <= '9') {
            cmdb[i-1] = byte(cmd[i] - '0');    
@@ -103,33 +102,12 @@ void npWrite(cRGB value, char * cmd){
     
 }
 
-double Thermister(int RawADC) {  //Function to perform the fancy math of the Steinhart-Hart equation
-  double Temp;
-  int R = 10000;
-  double Aone = 0.003354016;
-  double Bone = 0.0002569850;
-  double Cone = 0.000002620131;
-  double Done = 0.00000006383091;
-   Temp = log((5500)*((1024/RawADC) - 1));
-   //Temp = 1 / (Aone + (Bone*Temp) + (Cone * Temp*Temp) + (Done*Temp*Temp* Temp) );
-   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
-  
-  Temp = Temp - 273.15;              // Convert Kelvin to Celsius
-  
-  return Temp;
-}
+//declare reset function @ address 0
+//
+void(* resetFunc) (void) = NULL; 
 
 void loop() {
-  
-
-
-  temperatureADC = analogRead(PIN_ANALOG_TEMP ); //corresponds to P3
-  //temperature = Thermister(temperatureADC); 
-  sound = analogRead(PIN_ANALOG_SOUND);
-  envelope = analogRead(PIN_ANALOG_ENVELOPE);
-  
-  
-  
+    
     if(DigiUSB.available()){//DigiUSB.tx_remaining() == BUFFERSIZE) {
       //DigiUSB.println();
       //DigiUSB.println("nc");
@@ -140,21 +118,28 @@ void loop() {
       //DigiUSB.println(cmd);
       if(cmd[0] == 't'){
         //for(i = 0; i < NUMPRINT; i++){
+          temperatureADC = analogRead(PIN_ANALOG_TEMP ); //corresponds to P3
           DigiUSB.print(temperatureADC);
-          DigiUSB.println("t\t");
+          DigiUSB.println("t");
         //}
         printCnt++;
       } else if(cmd[0] == 'e') { 
-        //for(i = 0; i < NUMPRINT; i++){
+        for(i = 0; i < NUMPRINT; i++){
+          envelope = analogRead(PIN_ANALOG_ENVELOPE);
           DigiUSB.print(envelope);
-          DigiUSB.println("e\t");
-        //}
+          DigiUSB.print("e   ");
+          DigiUSB.delay(10);
+        }
+        DigiUSB.println();
         printCnt++;
       } else if(cmd[0] == 's') {
-        //for(i = 0; i < NUMPRINT; i++){
+        for(i = 0; i < NUMPRINT; i++){
+          sound = analogRead(PIN_ANALOG_SOUND);
           DigiUSB.print(sound);
-          DigiUSB.println("s");
-        //}
+          DigiUSB.print("s   ");
+          DigiUSB.delay(10);
+        }
+        DigiUSB.println();
         printCnt++;
       } else if (cmd[0] == 'n'){        
          if(DigiUSB.available()){
@@ -164,12 +149,13 @@ void loop() {
            cmd[0] = '\0';
            printCnt = 0;
          }
+      } else if (cmd[0] == 'r'){
+          resetFunc();
       } else if(DigiUSB.tx_remaining() != 0){
         //DigiUSB.print("tx_R ");
         //DigiUSB.println(DigiUSB.tx_remaining());
-        DigiUSB.print("NA ");
-        //DigiUSB.print("***");
-        DigiUSB.println(DigiUSB.available());
+        //DigiUSB.print("NA ");
+        DigiUSB.println();
       }
     }
     

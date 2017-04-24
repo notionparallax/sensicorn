@@ -20,7 +20,7 @@ A thermistor was chosen for version 1 as it is the most simple and space saving 
 The thermistor/resistor pair was unity gain buffered as an op-amp was availbe in the quad-op-amp used for sound.
 
 ####Interface
-The SK6812 - An RGB LED with dedicated LED driver IC (similar to Adafruit's Neopixel) was included as a status for 
+The SK6812 - An RGB LED with dedicated LED driver IC (similar to Adafruit's Neopixel) was included as a status for
 
 A power LED and resest button were used for testing purposes.
 
@@ -30,10 +30,10 @@ A 6 pogo pin was used for SPI communication with the AVR chip such that ISP boot
 Eagle was used to design the hardware.
 Seeed Studio's was used to manufacture and solder all S3 PCBs.
 
-**include:** 
-		- BOM 
+**include:**
+		- BOM
 		- prices
-		- how to use Seeed 
+		- how to use Seeed
 		- links to using Eagle
 		- testing of parts
 		- etc.
@@ -46,14 +46,14 @@ _more info_
 Follow Digistump's [Upload a bootloader to the Pro over ISP](https://digistump.com/wiki/digispark/tutorials/proisp)
 The process is essentially the same, however you must use the [correct fuse bits!!](http://electronics.stackexchange.com/questions/280993/how-to-write-bootloader-and-drivers-to-attiny167/ "A question I asked on Electronics Stack Exchange")
 
-###Prerequisites 
+###Prerequisites
 You must have Arduino installed. Learn how to install Arduino and the neccessary drivers and packages for micronucleus [here](http://digistump.com/wiki/digispark/tutorials/connectingpro). (This will be used later for loading programs onto the S3).
 
 For ISP I reccommend the Arduino UNO. _There are other options._
 
 To save soldering 6 times the number of boards you wish to use, I'd reccommend using pogo pins. We have used Sparkfun's [ISP Pogo pin adapter](https://www.sparkfun.com/products/11591).
 
-###Steps: 
+###Steps:
 1. Download the bootloader for digispark pro (micronucleus) [here](https://digistump.com/wiki/_media/digispark/tutorials/avrdude.zip "probootloader zip file".
 	- Extract and place "ProBootloaderR2.hex" in your folder containing avrdude (for me - C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\\). Avrdude is the executable used to bootload.
 	- You will also need avrdude.conf in this folder (a version with attiny167) so that avrdude knows what chip it is communicating with.
@@ -62,7 +62,7 @@ To save soldering 6 times the number of boards you wish to use, I'd reccommend u
 	- Now select _Tools->Board->Arduino/Genuino Uno_
 	- If you have more than one USB port you must also select the correct COM port for the UNO. _Tools->Port->COMX_ (for me COM6).
 	- Now open the ISP program to load. _File->Examples->ArduinoISP->ArduinoISP_.
-	- Select _Upload_. The Uno is now ready to bootload!	
+	- Select _Upload_. The Uno is now ready to bootload!
 1. Connect your SPI pins on the Uno to the correct pins, for the Uno:
 	- RST to 10
 	- MOSI to 11
@@ -83,7 +83,7 @@ To save soldering 6 times the number of boards you wish to use, I'd reccommend u
 
 		```C:\Program Files (x86)\Arduino\hardware\tools\avr\bin>avrdude -p attiny167 -c arduino -P COM6 -b 19200 -U lfuse:w:0xff:m -U hfuse:w:0xdf:m -U efuse:w:0xfe:m -U flash:w:ProBootloaderR2.hex:i```
 
-	<pre>
+	```
 	avrdude: AVR device initialized and ready to accept instructions
 
 	Reading | ################################################## | 100% 0.02s
@@ -156,8 +156,8 @@ To save soldering 6 times the number of boards you wish to use, I'd reccommend u
 	avrdude: safemode: Fuses OK (E:FE, H:DF, L:FF)
 
 	avrdude done.  Thank you.
-	</pre>
 
+```
 NB: This process can be done on any operating system. However do avoid attempting to flash a bootloader on a Raspberry Pi, there has been multiple issues, this is the same with any flashing (including code [i.e from arduino IDE]).
 
 ##Drivers
@@ -204,17 +204,9 @@ with the appropriate arduino code flashed onto the USB run python "read.py"
 	<pre>	sudo python read.py </pre>
 
 ##Writing to Neopixel
-Using WS2812 and DigiUSB library (see S3-write_np.ino in Arduin Code folder) The 
+Using WS2812 and DigiUSB library (see S3-write_np.ino in Arduin Code folder) The
 ###Too many sheep not enough RAM
 
-Cannot write to neopixel with DigiUSB library and adafruit_Neopixel library as they seem to be incompatible, potentially a RAM problem. 
+Cannot write to neopixel with DigiUSB library and adafruit_Neopixel library as they seem to be incompatible, potentially a RAM problem.
 
 See this [github issue](https://github.com/digistump/DigisparkExamplePrograms/issues/4) for detail.
-
-
-
-
-
-
-
-	
