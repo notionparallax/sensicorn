@@ -39,10 +39,13 @@ def read():
             try:
                 # sys.stdout.write(type(theDevice.read()))
                 val = theDevice.read()
-                if val > max_val:
-                    max_val = val
-                eq = "|" * int(val * 0.6)
+                # if val > max_val:
+                #     max_val = val
+                # eq = "|" * int(val * 0.6)
+                # print(eq)
+                eq = int(val)
                 print(eq)
+
 
                 # sys.stdout.flush()
             except:
