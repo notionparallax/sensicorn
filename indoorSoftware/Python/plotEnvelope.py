@@ -5,7 +5,7 @@ from scipy import signal
 '''
 Create an array of samples from sound text file
 '''
-with open('soundTest.txt') as soundFile:
+with open('soundTest2.txt') as soundFile:
   sound = [ int(i) for i in soundFile ]
 
 sound = np.array(sound)
