@@ -103,16 +103,16 @@ def receive():
 
     print val.strip()
 
-
-if sys.argv[1] == "read":
-    read()
-elif sys.argv[1] == "receive":
-    receive()
-elif sys.argv[1] == "send":
-    try:
-        args = sys.argv[2] + "\n"
-    except Exception as e:
-        args = "BADA55"
-    send(args)
-else:
-    print "You've got things muddled."
+if __name__ == "__main__":
+    if sys.argv[1] == "read":
+        read()
+    elif sys.argv[1] == "receive":
+        receive()
+    elif sys.argv[1] == "send":
+        try:
+            args = sys.argv[2] + "\n"
+        except Exception as e:
+            args = "BADA55"
+        send(args)
+    else:
+        print "You've got things muddled."

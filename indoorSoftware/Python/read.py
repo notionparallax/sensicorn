@@ -29,7 +29,8 @@ def read():
                                               theDevice.productName,
                                               theDevice.manufacturer)
     except:
-        pass
+        time.sleep(2.5)
+        print "Wait.."
     max_val = 0
     while True:
     # for i in range(1,1000):
@@ -41,9 +42,8 @@ def read():
                 val = theDevice.read()
                 # if val > max_val:
                 #     max_val = val
-                # eq = "|" * int(val * 0.6)
-                # print(eq)
-                eq = int(val)
+                eq = "|" * int(val * 0.6)
+                # eq = int(val)
                 print(eq)
 
 

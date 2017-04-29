@@ -33,7 +33,7 @@
 #define DELAYTIME           10  //delay time in milliseconds
 #define NUMPRINT            3   //number of analogue values to print (nd thus average)
 
-#define SERIESRESISTOR 10000
+#define SERIESRESISTOR      10000
 
 //Initialise variable and inbuilt functions
 double  envelope        = 0;
@@ -41,7 +41,7 @@ int     oldEnvelope     = 0;
 double  sound           = 0;
 int     temperatureADC  = 0;
 double  temperature     = 0;
-int     bInt            = 0; //placeholders for byte concatenation
+int     bInt            = 0; //placeholder for byte concatenation
 int     printCnt        = 0;
 
 
@@ -62,7 +62,7 @@ void setup() {
 // and assigns to cRGB values
 // e.g. given a char string of the form [n|F|F|0|0|3|C] == n, R = 255, G = 0, B = 100 
 void npWrite(cRGB value, char * cmd){
-
+        
     //convert strings to bytes data type
     for (i = 1; i < SIZEOFINSTR; i++){
       if (cmd[i] >= '0' && cmd[i] <= '9') {
@@ -81,7 +81,7 @@ void npWrite(cRGB value, char * cmd){
     } 
 
     if(i == -1){
-      value.r = 0; value.g = 0; value.b = 0;
+      
     } else {
       // bit shift (moves binary values to correct bin place
       cmdb[0] = cmdb[0] << 4;
@@ -95,7 +95,8 @@ void npWrite(cRGB value, char * cmd){
       value.g = bInt;
   
       bInt = cmdb[4] + cmdb[5];
-      value.b = bInt;  
+      value.b = bInt;
+        
     }
     LED.set_crgb_at(0, value); // Set value at LED found at index 0
     LED.sync(); // Sends the value to the LED
@@ -117,11 +118,11 @@ void loop() {
       }
       //DigiUSB.println(cmd);
       if(cmd[0] == 't'){
-        //for(i = 0; i < NUMPRINT; i++){
+        for(i = 0; i < NUMPRINT; i++){
           temperatureADC = analogRead(PIN_ANALOG_TEMP ); //corresponds to P3
           DigiUSB.print(temperatureADC);
           DigiUSB.println("t");
-        //}
+        }
         printCnt++;
       } else if(cmd[0] == 'e') { 
         for(i = 0; i < NUMPRINT; i++){
@@ -143,8 +144,9 @@ void loop() {
         printCnt++;
       } else if (cmd[0] == 'n'){        
          if(DigiUSB.available()){
-           //DigiUSB.print("CCN");
+           DigiUSB.print("-");
            npWrite(value, cmd);
+           DigiUSB.print("+");
            //clear cmd
            cmd[0] = '\0';
            printCnt = 0;
@@ -152,10 +154,7 @@ void loop() {
       } else if (cmd[0] == 'r'){
           resetFunc();
       } else if(DigiUSB.tx_remaining() != 0){
-        //DigiUSB.print("tx_R ");
-        //DigiUSB.println(DigiUSB.tx_remaining());
-        //DigiUSB.print("NA ");
-        DigiUSB.println();
+          DigiUSB.println();
       }
     }
     
@@ -167,8 +166,6 @@ void loop() {
     
     
     DigiUSB.delay(DELAYTIME);
-    //DigiUSB.refresh();
-  //}
 
 }
 
