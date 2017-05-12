@@ -12,7 +12,7 @@ The next step is reading a string so that any colour can be read, and messing wi
 
 
 ### Arduino crash
-While attempting this Arduino crashed, and wouldn't reopen. 
+While attempting this Arduino crashed, and wouldn't reopen.
 A Java error appeared when I ran `Arduino_debug.exe`
 ```
 Loading configuration...
@@ -69,15 +69,15 @@ double gaindBtogainR(double gainR){
 double vADCtoSPLdB(double vADC, double gainR){
   double gaindB = gaindBtogainR(gainR);
 
-  
+
   double vcc = 5.00;
   double adcBits = 1023.00;
-  
+
   double pascal1 = 94; // 1 Pascal in dB
   double V = (1/(2*sqrt(2)))*vADC*(vcc/adcBits);//0.004887586; //convert from adc to volts rms
   double sensitivity = -40; // dB
-  double sensitivityV = pow(10,sensitivity/20); //Vrms/Pa 
-  
+  double sensitivityV = pow(10,sensitivity/20); //Vrms/Pa
+
   double VdB = 20*log10(V/sensitivityV);
   //DigiUSB.println(VdB);
   double SPLdBunity = VdB + sensitivity + pascal1 + 20*log10((vcc/2)/sensitivityV);
@@ -87,7 +87,7 @@ double vADCtoSPLdB(double vADC, double gainR){
     DigiUSB.println("WTF!");
   }
   //DigiUSB.println(SPLdB);
-  
+
   return SPLdB;
 }
 ```
