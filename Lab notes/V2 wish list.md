@@ -1,4 +1,21 @@
 # V2 wish list
+two neopixels, an atmega, temperature, sound, light, humidity*, pressure* (potentially wind).
+
+light and temperature separate from rest of board.
+
+potentially multi layer for multiple clocks, and analogue.
+
+pi zero chord for extension out, potentially a pi-camera
+
+2MHz and 16MHz clocks, two oscillators, or 16 MHz divided
+
+thermistor with 1% tolerances.
+
+on board temperature for thermistor offset.
+
+
+
+
 - atmega
   - 328P
   - 328M
@@ -41,5 +58,13 @@
   - [analogue vs digital MEMS microphones](http://www.analog.com/media/en/technical-documentation/technical-articles/Analog-and-Digital-MEMS-Microphone-Design-Considerations-MS-2472.pdf)
   -  [I2C mic](http://www.mouser.com/ds/2/218/-746171.pdf)
 
+- light Sensors
+  - pi zero camera chord
+    - maybe as camera
 
 - [geomagnetic sensor](http://www.mouser.com/ds/2/783/BST-BMM150-DS001-01-786480.pdf)
+
+
+## Shopping list
+- [Atmega 328M]()
+- [Pressure sensor module](http://www.auselectronicsdirect.com.au/arduino-pressure-sensor-module-bmp280?gclid=CjwKEAjwl9DIBRCG_e3DwsKsizsSJADMmJ11tKfxi0ezAvWRC9rwPqejMBrH5LOwPU1thV7f3B-ybBoCjWLw_wcB) [OR](https://www.pakronics.com.au/products/adafruit-bmp280-i2c-or-spi-barometric-pressure-altitude-sensor-ada2651?utm_medium=cpc&utm_source=googlepla&variant=5684028801&gclid=CjwKEAjwl9DIBRCG_e3DwsKsizsSJADMmJ11S97aky4vGhfehQ7hGct_5uqy4YmQ6ba3Q63BrHTQCRoCQWDw_wcB)
