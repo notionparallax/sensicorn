@@ -45,6 +45,7 @@ Grid eye sensor is ~$20US a pop, has a 60° FOV. Will need to check what it coul
 *   Can we tune the colour temperature?
 *   Can we shed heat and not burn out the LEDs
 *   Can we power it all without needing a crazy PSU?
+*   What scale should we be thinking at? Single desk, pods of n?
 
 # Combined control unit
 
@@ -59,3 +60,38 @@ They'd probably be a [fire 7 or 8](https://www.amazon.com/dp/B01GEW27DA/ref=fs_o
 *   Communicating lollies or other things like that
 *   Tuning lighting to the task
 *   Mad disco party
+
+
+# System topology
+
+![](/assets/system_sketch1.jpg)
+
+I did a sketch, it might help explain some things. Explaining the parts:
+
+### control
+The control would be a fixed way of interacting with the system. It'd be input and output. It would be able to turn the lights on and off, and control them etc. It would also give output, so things like the values from the sensors, history etc. It would probably be an Amazon fire tablet because they are cheap, have screens, and can connect to a network.
+
+It might, or not, have some physical buttons on it? A big off switch for the pod, or manual lighting controls?
+
+### desk
+I've only showed these as a surface, they might be hight adjustable, they might be rectangles or they might be blobby stars. I'm failry sure they'll be horizontal, but we can't be sure!
+
+### thing
+This is a _something_ that connects the desks to the ceiling, it holds the power and data. It might also be useful to hold up the _control_
+
+### power and data
+Each desk will be supplied with power and data. Where this comes from is uncertain, but it's definitely going to _end up_ at the desk. We need to make sure that each desk has its own power and that we don't get cross plugging.
+
+### power monitoring
+This will either be at the _thing_ where all the power comes together, or it'll be at each desk. It'll measure and control (interrupt) the power supply.
+
+### light and sense
+This will contain the lighting and more of the sensing. This will have tunable coloured light. Currently looking at dotstar LEDs to give lots of control, but we might need to add more power from some cree type things.
+
+### S³
+This will be the next version, of the S³ (Sensicorn stampede stick). There will be a lot of these hopefully!
+
+### computer
+This powers the S³ and does all the heavy lifting of the data transfer.
+
+## How these parts are joined up
