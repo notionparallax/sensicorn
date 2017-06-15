@@ -32,6 +32,9 @@ the _scotopic_ LumFun is used for low lighting levels.
 
 Photopic LumFun is wavelength dependent
 
+### LED Physics
+[Cree explains physics of LED colour mixing](http://www.cree.com/led-components/media/documents/LED_color_mixing.pdf)
+
 ## LED power cost
 
 
@@ -44,6 +47,10 @@ Photopic LumFun is wavelength dependent
 
 
 # Products
+- use aluminium PCB
+- surface mount
+- other heat sinking
+
 [Replacement for Cage style lights](http://independenceled.com/led-fixture-products-landing-page-2/)
 [Another Replacement for Cage/T-12 lights](http://www.ecolocityled.com/product/mega-lux-white-led-strip/led_strip_light_tape)
 
