@@ -1,6 +1,8 @@
 # Microcontroller Research
 It's time to get real and write it all in C (f%$@ off IDE)
 
+## TIME STAMP raspberry-pi-setup
+[RTC for <$1 AUD](http://au.mouser.com/search/Refine.aspx?Keyword=187530542&Ns=Pricing%7c0&FS=True&Ntk=P_MarCom)
 
 ## Look into
 ### V-USB vs Driver specific
@@ -10,7 +12,7 @@ An OS may be useful rather than direct hardware
 it is compatible with megaAVR
 freeRTOS (probably too heavy)
 
-[a comparison of open source OSs](https://en.wikipedia.org/wiki/Comparison_of_open-source_operating_systems)
+[a comparison of open source OSs](https://en.wikipedia.org/wiki/Comparison_of_open-source_operating_systems )
 ### USB specific
 application specific AVR (USB)
 
