@@ -13,8 +13,8 @@
 - refundable
 - platform fees 5%
 - processing fees: 3-5%
-- obly available in
-games, technology, and design categories are most poopular on kickstarter
+- only available in
+games, technology, and design categories are most popular on kickstarter
 
 - only get money when reached goal
 ### Indiegogo
@@ -64,6 +64,7 @@ lack of an engaging story -> show them you have a good marketing strategy
 ![Category funding 2014 and 2015](http://icopartners.com/newblog/wp-content/uploads/2016/02/11-kickstarter_2014-2015_moneyraised_percategory.png)
 
 ## Examples
+[WiThumb](https://www.kickstarter.com/projects/hackarobot/withumb-arduino-compatible-wifi-usb-thumb-imu?ref=category_popular)
 [Smart Citizen](https://www.kickstarter.com/projects/acrobotic/the-smart-citizen-kit-crowdsourced-environmental-m) ($68000)
 [Bekla Torch](https://www.kickstarter.com/projects/361056939/bekla-torch?ref=category_popular) LED button.
 [Sentri home monitoring system](https://www.kickstarter.com/projects/474570093/sentri-welcome-to-a-smarter-home) ($330,000)
