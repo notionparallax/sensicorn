@@ -1,9 +1,20 @@
 # Market Research
 
 ## Failed
-[Flexibity Internet Sensors](https://www.kickstarter.com/projects/maximosipov/flexibity-internet-sensors) (£110
-pledged of £65,000 goal) (difficult to understand the product and potential uses) 2013 opensource
-
+- [Flexibity Internet Sensors](https://www.kickstarter.com/projects/maximosipov/flexibity-internet-sensors) (£110 pledged of £65,000 goal) (difficult to understand the product and potential uses) 2013 opensource
+- [Metawear CANCELLED not failed](https://www.kickstarter.com/projects/guardyen/metawear-coin-build-your-own-wearable-sensor-produ) cancelled 2/3 of the way into campaign, goal was $50,000-> alot higher than other campaigns
+- [**I-SEN1: Environmental Monitoring Solution for IoT**](https://www.kickstarter.com/projects/678204640/i-sen1-environmental-monitoring-solution-for-iot) (€1,087 pledged of €24,600 goal)(31 backers) Poor video-> no person, very impersonal. V similar to ours
+- [**Ready Universal Sensor Kit**](https://www.kickstarter.com/projects/foxfire/ready-universal-sensor-ki)(AU$ 7,790
+pledged of AU$ 26,000 goal)(85 backers) first campaign _why did this fail?_ too much asked for?
+-[Sense - A Wireless Sensor Network For Your World](https://www.kickstarter.com/projects/1158810778/sense-a-wireless-sensor-network-for-your-world) ($12,564 pledged of $150,000 goal)(88 backers)
+- [vUrja - Power Switch over Internet - Internet of Things](https://www.kickstarter.com/projects/1175176293/vurja-power-switch-over-internet-internet-of-thing) ($1 pledged of $200000) simple technology asking for WAY too much, look too much like an employee,
+- [Whisker IoT Invention System](https://www.kickstarter.com/projects/1630453569/whisker-iot-invention-system) ($24,032
+pledged of $79,865 goal) 196 backers, good video, again required too much money to break even. The creator has failed multiple times on kickstarter.
+-[Oh Eye for Raspberry Pi and Brickbridge for Mindstorms](https://www.kickstarter.com/projects/607801989/oh-eye-for-raspberry-pi-and-brickbridge-for-mindst) ($1,361 pledged of $3,000 goal) (34 backers) story too confusing, too much going on in video.
+- [WallChum Dual 2.1 Amp USB Charger w/ Accent Light Wall Plate](https://www.kickstarter.com/projects/903884365/wallchum-dual-21-amp-usb-charger-w-accent-light-wa) ($631 pledged of $30,000 goal) (22 backers) Good looking campaign, but almost identical to a very [successful KS](https://www.kickstarter.com/projects/snappower/snappower-charger-a-usb-charger-in-a-coverplate-no), also requires backer to mess around with mains
+- [SensoriOne - Measuring the World Set in Motion](https://www.kickstarter.com/projects/1794112152/sensorione-measuring-the-world-set-in-motion)($1,483
+pledged of $100,000 goal)(27 backers) first campaign going for 100k, similar product to metawear->too ambitious for first go
+-
 ## Small
 - [WiThumb](http://www.instructables.com/id/How-to-Build-a-WiFi-Thermometer/) ($5000)
 - [BlueberryE](https://www.kickstarter.com/projects/1444187967/blueberrye-wifi-connected-sensors-arduino-compatib/description) (1800 EU)
