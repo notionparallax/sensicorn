@@ -2,7 +2,17 @@
 It's time to get real and write it all in C (f%$@ off IDE)
 
 ## TIME STAMP raspberry-pi-setup
-[RTC for <$1 AUD](http://au.mouser.com/search/Refine.aspx?Keyword=187530542&Ns=Pricing%7c0&FS=True&Ntk=P_MarCom)
+[RT Clocl for <$1 AUD](http://au.mouser.com/search/Refine.aspx?Keyword=187530542&Ns=Pricing%7c0&FS=True&Ntk=P_MarCom)
+
+## AVR
+
+## ARM Cortex
+- SAM3N based board: [Digikey](https://www.digikey.com/product-detail/en/microchip-technology/ATSAM3N1AB-AU/ATSAM3N1AB-AU-ND/3128688) and [Mouser](http://au.mouser.com/_/?Keyword=AT91SAM&FS=True&Ns=Pricing|0)
+- [Datasheet](http://www.mouser.com/ds/2/268/11011s-1065298.pdf)
+
+
+- [LPC812](http://au.mouser.com/Search/Refine.aspx?Keyword=LPC812)
+-
 
 ## Look into
 ### V-USB vs Driver specific

@@ -34,7 +34,8 @@ $53,432) (597 backers)
 - [MetaWear health and fitness](https://www.kickstarter.com/projects/guardyen/hr-gsr-motion-dev-board-for-health-and-fitness-pro)($22,485)(222 backers)
 -
 
--[Motion sensor light](https://www.kickstarter.com/projects/1092341030/m-light-motion-sensor-activated-miniature-night-li) ($29,213) (418 backers) (good page and case, simple design)
+- [Aumi Mini - A smart notification light & nightlight](https://www.kickstarter.com/projects/aumi/aumi-mini-a-smart-notification-light-and-nightligh) (CA$ 38,030)(667 backers) (28 days to go)
+- [Motion sensor light](https://www.kickstarter.com/projects/1092341030/m-light-motion-sensor-activated-miniature-night-li) ($29,213) (418 backers) (good page and case, simple design)
 
 ## Large
 - [Riots](https://www.kickstarter.com/projects/riotsinstruments/riots-aware-for-you) ($43000) affordable sensor platform
