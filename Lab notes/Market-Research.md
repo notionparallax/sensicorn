@@ -19,6 +19,13 @@ pledged of $100,000 goal)(27 backers) first campaign going for 100k, similar pro
 - [WiThumb](http://www.instructables.com/id/How-to-Build-a-WiFi-Thermometer/) ($5000)
 - [BlueberryE](https://www.kickstarter.com/projects/1444187967/blueberrye-wifi-connected-sensors-arduino-compatib/description) (1800 EU)
 - [PUREmodules… for dreamers, tinkerers, hackers and designers](https://www.kickstarter.com/projects/pureengineering/puremodules-for-dreamers-tinkerers-hackers-and-des) ($7,270)(121 backers) great design, awesome connectors and added modules
+- [The dime-sized FemtoBeacon - Wireless IMU, ARM Cortex M0+](https://www.kickstarter.com/projects/1265095814/the-dime-sized-femtobeacon-wireless-imu-arm-cortex/description) (
+$3,801) (37 backers)
+- [Tau: The tiny 32-bit Arduino Zero compatible!](https://www.kickstarter.com/projects/rabidprototypes/tau-the-tiny-32-bit-arduino-zero-compatible)( $6,235)(157 backers)
+- [Neutrino 2.0: The tiny 32-bit Arduino Zero compatible!](https://www.kickstarter.com/projects/rabidprototypes/neutrino-20-the-tiny-32-bit-arduino-zero-compatibl)($5,703)(139 backers)
+- [mBuino, a programmable mbed keychain](https://www.kickstarter.com/projects/1359959821/mbuino-a-programmable-mbed-keychain)($10,957)(485 backers)
+- [Danyboard M0 | Electronic prototyping platform](https://www.kickstarter.com/projects/giuseppecaccavale/danyboard-m0-electronic-prototyping-platform)(€2,832)(53 backers)(great graphics and example videos)
+- [MatchboxARM](https://www.kickstarter.com/projects/1883701526/matchboxarm)(£8,641)(226 backers)
 
 - [WiCub](https://www.kickstarter.com/projects/911457810/wicub-wifi-temperature-and-humidity-sensor?ref=category) (£6,505) (68 Backers) great case
 
@@ -32,7 +39,7 @@ $53,432) (597 backers)
 - [MetaMotion: 10-axis IMU dev board w/ Wireless Sensor Fusion ](https://www.kickstarter.com/projects/metawear/metamotion-10-axis-imu-dev-board-w-wireless-sensor?ref=category) ($10,872) (86 backers)
 - [MetaWear: Bluetooth Sensors to make Wearables in Minutes](https://www.kickstarter.com/projects/guardyen/metawear-production-ready-wearables-in-30-minutes) ($115,067) (1887 backers)
 - [MetaWear health and fitness](https://www.kickstarter.com/projects/guardyen/hr-gsr-motion-dev-board-for-health-and-fitness-pro)($22,485)(222 backers)
--
+- [Teensy 3.0 - 32 bit ARM Cortex-M4, usable in Arduino and C](https://www.kickstarter.com/projects/paulstoffregen/teensy-30-32-bit-arm-cortex-m4-usable-in-arduino-a/)($70,874)(1,572 backers) started 2012
 
 - [Aumi Mini - A smart notification light & nightlight](https://www.kickstarter.com/projects/aumi/aumi-mini-a-smart-notification-light-and-nightligh) (CA$ 38,030)(667 backers) (28 days to go)
 - [Motion sensor light](https://www.kickstarter.com/projects/1092341030/m-light-motion-sensor-activated-miniature-night-li) ($29,213) (418 backers) (good page and case, simple design)

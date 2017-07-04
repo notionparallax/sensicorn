@@ -56,7 +56,7 @@ on board temperature for thermistor offset.
 - Digital mems microphone (2.80!!!!!)
   - http://www.mouser.com/ds/2/218/-746191.pdf
   - [analogue vs digital MEMS microphones](http://www.analog.com/media/en/technical-documentation/technical-articles/Analog-and-Digital-MEMS-Microphone-Design-Considerations-MS-2472.pdf)
-  -  [I2C mic](http://www.mouser.com/ds/2/218/-746171.pdf)
+  -  [I2S mic](http://www.mouser.com/ds/2/218/-746171.pdf)
 
 - light Sensors
   - pi zero camera chord
