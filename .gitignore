@@ -1,4 +1,4 @@
-*.gif
+S*.gif
 *.pyc
 frames/
 .ipynb_checkpoints/
