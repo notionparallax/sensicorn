@@ -45,17 +45,22 @@ $53,432) (597 backers)
 - [Motion sensor light](https://www.kickstarter.com/projects/1092341030/m-light-motion-sensor-activated-miniature-night-li) ($29,213) (418 backers) (good page and case, simple design)
 
 ## Large
+- [**Anyware: Smart Home Made Easy**](https://www.indiegogo.com/projects/anyware-smart-home-made-easy--3#/) ($60,214) (261) (Light bulb and sensor (with exactly the same sensors))
+- [**WeatherAtPoint - World's Smallest Weather Station**](https://www.indiegogo.com/projects/weatheratpoint-world-s-smallest-weather-station-photography-gadget#/) ($164,366)(382 backers) (plugs into smart phone via audio jack, claimed "passive" with no battery (powered from phone jack))
 - [Riots](https://www.kickstarter.com/projects/riotsinstruments/riots-aware-for-you) ($43000) affordable sensor platform
 - [McThings: Tiny Wireless Bluetooth Sensors and Controlers](https://www.kickstarter.com/projects/2016620887/mcthings-tiny-wireless-bluetooth-sensors-and-contr) (CA$ 97,549)(562 backers)
 - [NODE: a modular, handheld powerhouse of sensors](https://www.kickstarter.com/projects/soldermaster/node-a-modular-handheld-powerhouse-of-sensors?ref=category) ($76,340) (373) (open source sofware/firmware)
-- [PocketLab](https://www.kickstarter.com/projects/850087978/the-pocketlab-explorers-wanted) ($114,805)(916 backers) really good/engaging story
+- [PocketLab](https://www.kickstarter.com/projects/850087978/the-pocketlab-explorers-wanted) ($114,805)(916 backers) really good/engaging story also on [indiegogo](https://www.indiegogo.com/projects/pocketlab-voyager-explore-science-in-your-world-education#/)
 - [Ruuvi](https://www.kickstarter.com/projects/463050344/ruuvitag-open-source-bluetooth-sensor-beacon?ref=category) ($170000) (2,478 backers)open source blue tooth sensor beacon
 - [Sensordrone: The 6th Sense of Your Smartphone...& Beyond!](https://www.kickstarter.com/projects/453951341/sensordrone-the-6th-sense-of-your-smartphoneand-be)($170,017)(1,025 backers) VERY similar, includes additional expensive sensors and cost $199, created by sensorcon
 - [Notion: Be home, even when you're not](https://www.kickstarter.com/projects/notion/notion-be-home-even-when-youre-not) ($281,655)(1338 backers)
 - [Sentri](https://www.kickstarter.com/projects/474570093/sentri-welcome-to-a-smarter-home) ($390000)
 - [WigWag: Automatic Starts Here](https://www.kickstarter.com/projects/wigwag/wigwag-scan-it-control-it-rule-it-share-it) ($454,976)(1,694 backers) costs $139
 - [Twine : Listen to your world, talk to the Internet](https://www.kickstarter.com/projects/supermechanical/twine-listen-to-your-world-talk-to-the-internet)($556,541 of 35k)(3,966) 2012 very good web interface and software
+- [Smart Home security](https://www.indiegogo.com/projects/korner-home-security-for-everyone-app#/)($434,313)(3294 backers)
 - [Redstone Connect desk sensor](http://www.redstoneconnectplc.com/products/onespace/)
 
 
+- [IntelliPlug: WiFi Smartplug](https://www.indiegogo.com/projects/intelliplug-your-friendly-wi-fi-smart-plug-home-gadgets/x/16964540#/) (535% funded but not yet finished)
 - [Circadia Sleep tracker](https://www.kickstarter.com/projects/circadia/circadia-sleep-and-work-better-using-nasa-inspired?ref=category_popular)
+- [InstaMic](https://www.indiegogo.com/projects/instamic-the-smartest-microphone-ready-to-record-video-music#/) great video

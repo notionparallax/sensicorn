@@ -4,7 +4,7 @@
 Using better design (wheatstone bridge, precise resistors) and a higher bit ADC (the 12-bit SAMD21) we can get enough *temperature* precision with a **Thermistor***.
 
 If Humidity is needed:
-
+HDC1010, but $$$
 ## Options
 - [MCP9808](http://au.mouser.com/Search/Refine.aspx?Keyword=MCP9808) (~$1.80) digital, temp
 
@@ -33,3 +33,8 @@ If Humidity is needed:
 
 Sensors:
 - MPL3115A2
+
+---
+
+[A good discussion/pointers on thermistors](https://www.reddit.com/r/arduino/comments/5krql4/whats_the_difference_between_1k_10k_and_100k/)
+[Wheatstone bridge for thermistor](http://www.ti.com/lit/ml/slyp163/slyp163.pdf)
