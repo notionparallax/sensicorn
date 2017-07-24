@@ -3,3 +3,5 @@ S*.gif
 frames/
 .ipynb_checkpoints/
 tfPractice
+*.db
+*.psd
