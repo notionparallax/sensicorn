@@ -59,7 +59,7 @@ I found /usr was 3.0Gib full (100%)
 Looks like I'm going to need to remove a bunch of unnecessary libraries.
 ```
 sudo apt-get remove [library to remove]
-audo apt-get autoremove was not enough for the big guys (python 3.4, libreoffice, SuperCOliider etc.)
+sudo apt-get autoremove was not enough for the big guys (python 3.4, libreoffice, SuperCOliider etc.)
 ```
 was not enough.
 Using:

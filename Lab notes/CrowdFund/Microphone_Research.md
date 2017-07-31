@@ -9,7 +9,7 @@
 2x2 mm footprint (includes legs)-> potentially best option
 needs 9 passive elements (R and C)
 ## Digital MEMs
-
+[Interfacing an I2S Device to a Microcontoller](http://www.ti.com/lit/an/slaa449a/slaa449a.pdf)
 ### PDM
 PDM most common for phones
 [A good PDM mic](https://store.invensense.com/datasheets/invensense/INMP621.pdf)

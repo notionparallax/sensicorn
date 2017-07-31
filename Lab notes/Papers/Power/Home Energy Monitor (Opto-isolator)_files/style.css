@@ -1,0 +1,11 @@
+TD        { FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12pt; LINE-HEIGHT: 15pt; }
+BODY      { FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12pt; LINE-HEIGHT: 15pt; }
+H1        { LINE-HEIGHT: 22pt; }
+.NiceText { FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12pt; LINE-HEIGHT: 15pt; }
+.Footer   { FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12pt; LINE-HEIGHT: 15pt; }
+.DontCare { background-color=#E0E0E0; }
+.NoBorder { border-style:none; }
+.code     { background-color: #C0C0E0; }
+img {
+  max-width: 100%
+}
