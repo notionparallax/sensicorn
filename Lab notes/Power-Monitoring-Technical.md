@@ -1,9 +1,10 @@
 # Power Monitoring Technical
-P = IV
+**P = IV**
+
 Ideally measure while maintaining electrical isolation*
 We want information _not_ power (seems like a line from a movie?)
 
-Map/convert AC Mains voltage to 5V DC Voltage
+Map/convert AC Mains power to 5V DC Voltage
 
 Isolation Methods includes:
 - Magnetic (e.g. a transformer) -> big and expensive (10 cm³, $80 AUD) most common

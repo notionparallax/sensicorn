@@ -12,7 +12,7 @@ Real time dimmer with knob
 
 
 ---
-Utilise multiple functions that arduino does not have
+Utilise multiple functions that Mega does not have
 - Serial Communication channels
 - Analogue comparators
 - DAC (analogue output)
