@@ -16,6 +16,8 @@ Isolation Methods includes:
 [Hall effect sensor](http://www.electronicdesign.com/automotive/columbus-2020-and-rise-smaller-smart-cities)
 AC712->obsolete, use ACS723 family [A1324](http://pdf1.alldatasheet.com/datasheet-pdf/view/446684/ALLEGRO/A1324.html)
 [watch this](https://www.youtube.com/watch?v=UF5jrnXvTlM)
+
+[Non-invasive tranformer](https://www.sparkfun.com/products/11005) more expensive and bulkier
 ## Voltage V
 [Optical isolation amplifier](https://electronics.stackexchange.com/questions/51116/measuring-voltage-while-maintaining-isolation)
 
@@ -30,3 +32,4 @@ Is active power valuable?
 what is the impedance profile (purely resistive)
 
 ![Power model](acp288.gif)
+[Power factor measuring link](https://www.picotech.com/library/application-note/analysing-mains-power-with-picoscope)
