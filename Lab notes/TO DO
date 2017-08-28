@@ -1,0 +1,8 @@
+TO DO
+1. multiple neopixels
+2. SERCOM changes
+3. make prototype shield
+4. confirm sensor designs
+4. micropython/circuitpython (https://learn.adafruit.com/micropython-for-samd21/load-firmware)
+5. loading a/which bootloader
+6. pre-loading a bootloader
