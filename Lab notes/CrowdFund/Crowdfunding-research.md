@@ -1,3 +1,19 @@
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Crowdfunding research](#)
+	- [Why?](#)
+	- [Which one?](#)
+		- [Kickstarter](#)
+		- [Indiegogo](#)
+	- [How much do hardware startups get?](#)
+	- [Requirements](#)
+	- [Marketing](#)
+		- [video](#)
+	- [Shipping](#)
+	- [Pitfalls](#)
+		- [Shipping hardware is hard](#)
+	- [Stats](#)
+	- [Examples](#)
 # Crowdfunding research
 
 ## Why?
