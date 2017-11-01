@@ -1,6 +1,9 @@
 # from pymongo import MongoClient
 from scipy.misc import imread
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import datetime
 import dateutil.parser
 import json
@@ -23,18 +26,36 @@ SHOW_TESTS = False
 
 
 def getDFfromCSVURL(url, columnNames=False):
-    r = requests.get(url)
-    data = r.content
-    if columnNames:
-        return pd.read_csv(StringIO(data), header=0, names=columnNames)
+    """Get a CSV grom a google URL and return it as a DataFrame.
+
+    This will do a complicated thing with stringIO if we've got an old version
+    of pandas, or just a simple thing if we have a new one.
+    """
+    def pandas_gt_v0_19_2():
+        v = pd.__version__.split(".")
+        if (int(v[1])>= 19) and (int(v[2])>= 2):
+            return True
+        else:
+            return False
+
+    if pandas_gt_v0_19_2():
+        if columnNames:
+            return pd.read_csv(url, header=0, names=columnNames)
+        else:
+            return pd.read_csv(url)
     else:
-        return pd.read_csv(StringIO(data))
+        r = requests.get(url)
+        data = r.content
+        if columnNames:
+            return pd.read_csv(StringIO(data.decode('utf-8')), header=0, names=columnNames)
+        else:
+            return pd.read_csv(StringIO(data.decode('utf-8')))
 
 
 if SHOW_TESTS:
-    print getDFfromCSVURL("https://docs.google.com/spreadsheets/d/1sijQZR2iFLo2FS_3r5gbsuAkaglRz557LWjdLxnPkpE/pub?gid=0&single=true&output=csv").head(3)
-    print getDFfromCSVURL("https://docs.google.com/spreadsheets/d/1uE_tUItRANypaWxCmZeXWsgFZq_JDG626v4Gg2UQfKg/pub?gid=952022876&single=true&output=csv",
-                          columnNames=["a", "b", "c", "d", "e"]).head(3)
+    print( getDFfromCSVURL("https://docs.google.com/spreadsheets/d/1sijQZR2iFLo2FS_3r5gbsuAkaglRz557LWjdLxnPkpE/pub?gid=0&single=true&output=csv").head(3))
+    print( getDFfromCSVURL("https://docs.google.com/spreadsheets/d/1uE_tUItRANypaWxCmZeXWsgFZq_JDG626v4Gg2UQfKg/pub?gid=952022876&single=true&output=csv",
+                          columnNames=["a", "b", "c", "d", "e"]).head(3) )
 
 
 def timeStats(df, showprint=True, actuallyReturn=True):
@@ -44,20 +65,20 @@ def timeStats(df, showprint=True, actuallyReturn=True):
         maxT = df.time.max()
         rangeT = maxT-minT
     else:
-        print "are you mental, why are you calling this with everything turned off?"
+        print( "are you mental, why are you calling this with everything turned off?")
     if showprint:
-        print minT,   "First Recording in this set"
-        print maxT,   "Last Recording in this set"
-        print rangeT, "Range covered"
+        print( minT,   "First Recording in this set")
+        print( maxT,   "Last Recording in this set")
+        print( rangeT, "Range covered")
     if actuallyReturn:
         return (minT, maxT, rangeT)
 
 
 if False:  # SHOW_TESTS:
     timeStats(bigdf, showprint=False, actuallyReturn=False)
-    print
+    print()
     timeStats(bigdf, actuallyReturn=False)
-    print timeStats(bigdf, showprint=False), "\n"
+    print( timeStats(bigdf, showprint=False), "\n")
     timeStats(bigdf)
 
 
@@ -71,21 +92,21 @@ def timeCropDf(df, startTime, windowLength):
 
 
 if SHOW_TESTS:
-    print "no tests written yet"
+    print( "no tests written yet")
 
 
 def makeGif(fromPath, fileName, stepSize="", forReal=True, chatty=True):
     # send a system command to make this into a gif. See https://community.linuxmint.com/tutorial/view/1118
     command = "convert -delay 20 -loop 0 {} {}{}.gif".format(fromPath, fileName, stepSize)
     if chatty:
-        print command
-        print "made", fileName
+        print( command)
+        print( "made", fileName)
     if forReal:
         return os.system(command)
 
 
 if SHOW_TESTS:
-    print "no tests written yet"
+    print( "no tests written yet")
 
 
 def clearFolder(path):
@@ -94,7 +115,7 @@ def clearFolder(path):
 
 
 if SHOW_TESTS:
-    print "no tests written yet"
+    print( "no tests written yet")
 
 
 # In[10]:
@@ -108,9 +129,9 @@ def sydTimeToUTC(naiveTime):
 
 if SHOW_TESTS:
     for z in pytz.country_timezones['au']:
-        print z
-    print              datetime.datetime(2016, 10, 17, 11, 21, 32), "Australia/Sydney"
-    print sydTimeToUTC(datetime.datetime(2016, 10, 17, 11, 21, 32)), "UTC"
+        print( z)
+    print(              datetime.datetime(2016, 10, 17, 11, 21, 32), "Australia/Sydney")
+    print( sydTimeToUTC(datetime.datetime(2016, 10, 17, 11, 21, 32)), "UTC")
 
 
 def getSampleWalkData(url):
@@ -129,11 +150,11 @@ def getTrainingWalkData(trainingWalkURLs, stickerLocations):
         richStickerData = richStickerData.sort_values("time", ascending=1)
         richStickerData["minor"] = twURL["minor"]
 
-        print "{}: {} TO {} ({}) {} rows".format(i,
+        print( "{}: {} TO {} ({}) {} rows".format(i,
                                                  richStickerData.time.min(),
                                                  richStickerData.time.max(),
                                                  richStickerData.time.max() - richStickerData.time.min(),
-                                                 richStickerData.shape[0])
+                                                 richStickerData.shape[0]) )
 
         trainingWalks.append(richStickerData)
     return trainingWalks
@@ -165,7 +186,7 @@ def robustRequest(request, headers, tries=10, timeoutSeconds=20):
                         return response
                     except:
                         if i == tries-1:
-                            print "{}\nfailed {} times".format(request, i+1), sys.exc_info()[1]
+                            print( "{}\nfailed {} times".format(request, i+1), sys.exc_info()[1])
                             return False
 
 
@@ -204,8 +225,8 @@ def nSecondWindows(stickerRecordingsRow, baseStationData, chunkLength=5.0, chatt
                 responses['rssiAdj'] = responses.rssi - minPower
 
                 if chatty:
-                    print "index: {}\n{}\nstart: {}\ndetection: {}\nend: {}\ntook: {}\nresult rows: {}\n".format(
-                        row.name, row, ws, row.time, we, datetime.datetime.now() - startTime, responses.shape[0])
+                    print( "index: {}\n{}\nstart: {}\ndetection: {}\nend: {}\ntook: {}\nresult rows: {}\n".format(
+                        row.name, row, ws, row.time, we, datetime.datetime.now() - startTime, responses.shape[0]) )
 
                 return responses
             else:
@@ -215,9 +236,9 @@ def nSecondWindows(stickerRecordingsRow, baseStationData, chunkLength=5.0, chatt
             # the request returned false, so so will we
             return "detection request failed, deal with this later"
     except:
-        print "OH FUCK"
-        print sys.exc_info()
-        print row
+        print( "OH FUCK")
+        print( sys.exc_info())
+        print( row)
         return "Something seriously pooped its pants"
 
 
@@ -269,7 +290,7 @@ def timeSliced(fullRow, savePlace, contextDF, baseStationData, stickerLocations)
     ax.scatter(fullRow.x, fullRow.y, zorder=30, s=150, c="r")
 
     # --- clean up vvv
-    print "saving to:", savePlace+title+".png"
+    print( "saving to:", savePlace+title+".png")
     fig.savefig(savePlace+title+".png", bbox_inches='tight')
     fig.clf()
     plt.close()
