@@ -20,9 +20,10 @@ HDC1010, but $$$
 - [TMP102](http://au.mouser.com/_/?Keyword=TMP102&FS=True)(~$2.00) temp
 - [LM234](http://au.mouser.com/Search/Refine.aspx?Keyword=LM234%5c)(~$1.50) temp analogue, constant current source for thermistor
 - [LM334](http://au.mouser.com/Search/Refine.aspx?Keyword=LM334D)(~$1.25) temp analogue, constant curent source for thermistor
--
-[**Si7006**](http://www.mouser.com/ds/2/368/Si7006-A20-736785.pdf)(~$3.00) +-5%RH, +-1 degC
-[**HDC1010**](http://au.mouser.com/Search/Refine.aspx?Keyword=HDC1010)(~4.00) +- 2%RH +-0.2degC, I2C, 2 mm x 1.6 mm footprint
+- [**Si7006**](http://www.mouser.com/ds/2/368/Si7006-A20-736785.pdf)(~$3.00) +-5%RH, +-1 degC
+- [**HDC1010**](http://au.mouser.com/Search/Refine.aspx?Keyword=HDC1010)(~4.00) +- 2%RH +-0.2degC, I2C, 2 mm x 1.6 mm footprint
+- [MCP9701](http://au.mouser.com/Search/Refine.aspx?Keyword=MCP9701) ($0.357, +-2degC)
+- 
 ## Temp Tutorials
 [Precise thermistor (5mK)](https://pa1ejo.wordpress.com/2014/07/25/how-to-build-a-5-milli-kelvin-thermometer-with-an-arduino/)
 [underwater temp sensors](https://edwardmallon.wordpress.com/2016/06/09/better-thermistor-readings-with-an-arduino-series-resistors-aref/)

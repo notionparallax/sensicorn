@@ -1,15 +1,8 @@
-# CircuitPlaygroundExpress_Temperature
-# reads the on-board temperature sensor and prints the value
-
-import adafruit_thermistor
+import audiobusio
 import board
-import time
-from analogio import AnalogIn
+import array
 
-thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE, 11371.93, 10000, 25, 3950)
-analogin = AnalogIn(board.LIGHT)
-
-while True:
-    print("Temperature is: {} C Lux is: {}".format(thermistor.temperature,analogin.value))
-
-    time.sleep(0.25)
+# Prep a buffer to record into
+b = bytearray(200)
+with audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA) as mic:
+    print(mic)
