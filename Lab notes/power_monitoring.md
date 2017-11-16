@@ -4,7 +4,7 @@ First test case for this, potentially productise later
 
 Desk pods/benches will be in 2-8 but probably 6 person groups. Better to make unit deal in modules of 4 plugs.
 
-Can the module run with a pi zero w? What would it need to do? ML would probably need to run locally, is that feasible on a zero? YES?! [Check this out](https://blogs.microsoft.com/next/2017/06/29/ais-big-leap-tiny-devices-opens-world-possibilities/)
+Can the module run with a pi zero w? What would it need to do? ML would probably need to run locally, is that feasible on a zero?
 
 One input cable would be split, then internally have 4 tracks. Each track is monitored switched.
 

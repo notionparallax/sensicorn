@@ -5,3 +5,6 @@ frames/
 tfPractice
 *.db
 *.psd
+*.db
+initialDataAnalysis/allScanDetections.csv
+*.p
