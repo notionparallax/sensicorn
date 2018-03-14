@@ -5,8 +5,8 @@ Created on Wed Jul 15 16:56:46 2015
 @author: Alexander Hoch
 """
 
-import Tkinter as tk
-import tkMessageBox
+import tkinter as tk
+from tkinter import messagebox
 import colorsys
 from  GridEyeKit import GridEYEKit
 
@@ -127,15 +127,15 @@ class GridEYE_Viewer():
                         normtemp = (float(tarr[i])-self.MINTEMP.get())/TempSpan #Normalize temperature 0...1
                     h = normtemp*self.HUEspan+self.HUEstart # Convert to HSV colors (only hue used)
                     if h>1:
-                        print h
-                        print normtemp
-                        print self.HUEspan
-                        print self.HUEstart
+                        print(h)
+                        print(normtemp)
+                        print(self.HUEspan)
+                        print(self.HUEstart)
                     bgrgb = tuple(255*j for j in colorsys.hsv_to_rgb(h,1,1)) # convert to RGB colors
                     tarrpix.config(bg=('#%02x%02x%02x' % bgrgb)) # Convert to Hex String
                     i +=1  # incement tarr counter
             else:
-                print "Error - temperarure array lenth wrong"
+                print("Error - temperarure array lenth wrong")
             self.frameTarr.after(10,self.update_tarrpixels) # recoursive function call all 10 ms (get_tarr will need about 100 ms to respond)
 
 
