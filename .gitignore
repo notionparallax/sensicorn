@@ -8,3 +8,4 @@ tfPractice
 *.db
 initialDataAnalysis/allScanDetections.csv
 *.p
+allScanDetections.csv
